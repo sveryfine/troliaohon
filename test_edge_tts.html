@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Microsoft Edge TTS (Miễn phí 100%)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 100px; margin: 10px 0; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+        select { width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
+        button { background: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #cccccc; cursor: not-allowed; }
+        .status { margin-top: 15px; text-align: center; color: #555; }
+        audio { width: 100%; margin-top: 20px; outline: none; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Kiểm tra Giọng đọc Edge TTS</h2>
+        <p>Giao thức Websocket chạy trực tiếp trên Client. Không cần Backend, không tốn phí.</p>
+        
+        <label>Chọn giọng đọc:</label>
+        <select id="voiceSelect">
+            <option value="vi-VN-HoaiMyNeural">Hoài My (Nữ miền Nam - Rất tự nhiên)</option>
+            <option value="vi-VN-NamMinhNeural">Nam Minh (Nam miền Bắc)</option>
+        </select>
+
+        <label>Nhập văn bản cần đọc:</label>
+        <textarea id="textInput">Chào bạn, mình là Cưng. Mình được tích hợp giọng đọc AI mới nhất, bạn thấy giọng mình có giống người thật không?</textarea>
+
+        <button id="playBtn">Phát âm thanh</button>
+        <div class="status" id="statusText">Trạng thái: Đang chờ...</div>
+        
+        <audio id="audioPlayer" controls style="display:none;"></audio>
+    </div>
+
+    <script>
+        // Hàm tạo UUID giả lập
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Hàm chính: Gọi Edge TTS qua WebSocket và trả về Blob URL
+        function getEdgeTTSAudio(text, voice) {
+            return new Promise((resolve, reject) => {
+                // Token mặc định của Microsoft Edge Read Aloud
+                const ws = new WebSocket('wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4');
+                
+                let audioChunks = [];
+                
+                ws.onopen = () => {
+                    const date = new Date().toString();
+                    
+                    // 1. Gửi cấu hình định dạng MP3
+                    const configMsg = `X-Timestamp:${date}\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":"false","wordBoundaryEnabled":"true"},"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}`;
+                    ws.send(configMsg);
+                    
+                    // 2. Gửi văn bản cần đọc dưới dạng SSML
+                    const requestId = generateUUID();
+                    const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='vi-VN'><voice name='${voice}'><prosody pitch='+0Hz' rate='+0%' volume='+0%'>${text}</prosody></voice></speak>`;
+                    const ssmlMsg = `X-RequestId:${requestId}\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:${date}\r\nPath:ssml\r\n\r\n${ssml}`;
+                    ws.send(ssmlMsg);
+                };
+                
+                ws.onmessage = async (event) => {
+                    // Nếu là chuỗi Text -> Đọc metadata hoặc tín hiệu kết thúc
+                    if (typeof event.data === 'string') {
+                        if (event.data.includes('Path:turn.end')) {
+                            ws.close(); // Đóng kết nối khi hoàn thành
+                            // Gộp tất cả các mảnh âm thanh lại thành file MP3
+                            const blob = new Blob(audioChunks, { type: 'audio/mp3' });
+                            resolve(URL.createObjectURL(blob));
+                        }
+                    } 
+                    // Nếu là dữ liệu Binary (Blob) -> File âm thanh
+                    else if (event.data instanceof Blob) {
+                        const arrayBuffer = await event.data.arrayBuffer();
+                        const view = new Uint8Array(arrayBuffer);
+                        
+                        // Tìm chuỗi \r\n\r\n để tách phần Header của gói tin nhị phân
+                        let headerEnd = 0;
+                        for (let i = 0; i < view.length - 3; i++) {
+                            if (view[i] === 13 && view[i+1] === 10 && view[i+2] === 13 && view[i+3] === 10) {
+                                headerEnd = i + 4;
+                                break;
+                            }
+                        }
+                        // Đưa phần audio thô vào mảng
+                        if (headerEnd > 0) {
+                            audioChunks.push(event.data.slice(headerEnd));
+                        }
+                    }
+                };
+                
+                ws.onerror = (err) => {
+                    reject('Lỗi kết nối WebSocket');
+                };
+            });
+        }
+
+        // Xử lý giao diện
+        const playBtn = document.getElementById('playBtn');
+        const textInput = document.getElementById('textInput');
+        const voiceSelect = document.getElementById('voiceSelect');
+        const statusText = document.getElementById('statusText');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        playBtn.addEventListener('click', async () => {
+            const text = textInput.value.trim();
+            if (!text) {
+                alert("Vui lòng nhập văn bản!");
+                return;
+            }
+
+            playBtn.disabled = true;
+            statusText.textContent = "Trạng thái: Đang tổng hợp giọng nói từ Microsoft...";
+            audioPlayer.style.display = 'none';
+
+            try {
+                // Gọi hàm lấy URL Audio
+                const audioUrl = await getEdgeTTSAudio(text, voiceSelect.value);
+                
+                statusText.textContent = "Trạng thái: Thành công!";
+                audioPlayer.src = audioUrl;
+                audioPlayer.style.display = 'block';
+                audioPlayer.play();
+                
+            } catch (error) {
+                statusText.textContent = "Trạng thái: Thất bại!";
+                console.error(error);
+                alert("Có lỗi xảy ra khi tạo giọng đọc.");
+            } finally {
+                playBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

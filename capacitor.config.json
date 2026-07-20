@@ -1,0 +1,12 @@
+{
+  "appId": "com.example.troliaohon",
+  "appName": "CƯNG",
+  "webDir": "dist",
+  "android": {
+    "allowMixedContent": true,
+    "appendUserAgent": "Edg/130.0.0.0"
+  },
+  "server": {
+    "cleartext": true
+  }
+}

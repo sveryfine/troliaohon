@@ -1,0 +1,3 @@
+tại tab đăng kí có thể đăng kí và đăng nhập tạo tài khoản bằng email, mật khẩu, tên tài khoản, mỗi email chỉ được đăng kí 1 tài khoản, khi đăng ký thành công sẽ chuyển sang tab đăng nhập, còn khi đăng nhập thì nếu không có tài khoản thì sẽ chuyển sang tab đăng kí. phần đăng kí tài khoản tạo liên kết với firebase  để làm database lưu thông tin tài khoản
+ngoài ra tất cả dữ liệu truyện được tạo ra sẽ lưu trên firebase database như đã nói
+còn phần ảnh thì dùng gg drive để lưu trữ và tự động liên kết với app hiển thị phần ảnh đó ( có thể chỉnh sửa dễ dàng) 

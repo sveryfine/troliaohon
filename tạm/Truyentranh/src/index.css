@@ -1,0 +1,740 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+:root {
+  --bg-primary: #e8dcc8;
+  --bg-secondary: #d9cbb0;
+  --bg-card: rgba(210, 195, 165, 0.75);
+  --bg-glass: rgba(180, 160, 120, 0.1);
+  --text-primary: #3b2f20;
+  --text-secondary: #6b5a42;
+  --text-muted: #8a7a60;
+  --accent: #8b5e3c;
+  --accent-hover: #7a4f30;
+  --accent-glow: rgba(139, 94, 60, 0.25);
+  --accent-secondary: #c49a3c;
+  --border-color: rgba(139, 94, 60, 0.2);
+  --border-hover: rgba(139, 94, 60, 0.35);
+  --danger: #b94a3a;
+  --success: #5a8a50;
+  --shadow-sm: 0 2px 8px rgba(60, 40, 20, 0.15);
+  --shadow-md: 0 4px 20px rgba(60, 40, 20, 0.2);
+  --shadow-lg: 0 8px 40px rgba(60, 40, 20, 0.25);
+  --shadow-glow: 0 0 20px var(--accent-glow);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: 
+    /* Nếp gấp chính — sáng/tối tạo chiều sâu */
+    linear-gradient(
+      172deg,
+      transparent 20%,
+      rgba(180, 140, 80, 0.06) 20.3%,
+      rgba(255, 240, 200, 0.08) 20.6%,
+      transparent 21%
+    ),
+    linear-gradient(
+      168deg,
+      transparent 45%,
+      rgba(160, 120, 60, 0.05) 45.2%,
+      rgba(255, 245, 220, 0.07) 45.5%,
+      transparent 46%
+    ),
+    linear-gradient(
+      175deg,
+      transparent 70%,
+      rgba(140, 100, 50, 0.06) 70.2%,
+      rgba(255, 240, 210, 0.08) 70.5%,
+      transparent 71%
+    ),
+    /* Nếp nhăn nhỏ mờ */
+    repeating-linear-gradient(
+      3deg,
+      transparent,
+      transparent 140px,
+      rgba(160, 120, 60, 0.025) 140px,
+      rgba(255, 240, 200, 0.04) 141px,
+      rgba(140, 100, 50, 0.02) 142px,
+      transparent 143px
+    ),
+    repeating-linear-gradient(
+      177deg,
+      transparent,
+      transparent 200px,
+      rgba(130, 90, 40, 0.02) 200px,
+      rgba(255, 235, 190, 0.035) 201px,
+      transparent 202px
+    ),
+    /* Vết ố loang giấy cũ — mềm mại hơn */
+    radial-gradient(ellipse at 10% 5%, rgba(180, 140, 70, 0.12) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 85%, rgba(160, 120, 50, 0.1) 0%, transparent 35%),
+    radial-gradient(ellipse at 30% 60%, rgba(190, 160, 100, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 25%, rgba(150, 110, 50, 0.08) 0%, transparent 35%),
+    radial-gradient(ellipse at 50% 90%, rgba(170, 130, 60, 0.07) 0%, transparent 40%),
+    /* Viền tối ở góc giấy cũ */
+    radial-gradient(ellipse at 0% 0%, rgba(100, 70, 30, 0.12) 0%, transparent 30%),
+    radial-gradient(ellipse at 100% 100%, rgba(100, 70, 30, 0.1) 0%, transparent 30%),
+    radial-gradient(ellipse at 100% 0%, rgba(90, 60, 25, 0.08) 0%, transparent 25%),
+    radial-gradient(ellipse at 0% 100%, rgba(90, 60, 25, 0.08) 0%, transparent 25%),
+    /* Nền giấy cũ */
+    linear-gradient(180deg, #ecdfc9 0%, #e4d5bc 25%, #dccbaa 50%, #d8c5a2 75%, #d2be9a 100%);
+}
+
+/* Texture hạt giấy nhẹ */
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* Nếp gấp lớn chéo qua toàn trang */
+#root::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(
+      155deg,
+      transparent 35%,
+      rgba(160, 120, 60, 0.04) 35.5%,
+      rgba(255, 240, 200, 0.06) 36%,
+      rgba(140, 100, 40, 0.03) 36.5%,
+      transparent 37%
+    ),
+    linear-gradient(
+      162deg,
+      transparent 60%,
+      rgba(150, 110, 50, 0.035) 60.3%,
+      rgba(255, 235, 195, 0.05) 60.6%,
+      rgba(130, 90, 40, 0.025) 60.9%,
+      transparent 61.2%
+    );
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════
+   BOTTOM NAVIGATION — Floating Glass Bar
+   ═══════════════════════════════════════ */
+.bottom-nav {
+  display: flex;
+  background: transparent; /* Màu nền giờ do thẻ SVG vẽ */
+  height: 54px;
+  justify-content: space-around;
+  margin-top: auto;
+  position: relative;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-radius: 24px 24px 0 0; /* Bo tròn 2 góc trên mềm hơn */
+}
+
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 25%;
+  height: 54px; /* Khớp với height mới của bottom-nav */
+  display: flex;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  pointer-events: none;
+  z-index: 2; /* Nổi trên SVG */
+}
+
+/* Lớp nền SVG chất lỏng */
+.nav-liquid-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Nằm dưới các nút tab */
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0; /* Bo tròn góc tổng thể của thanh nav nếu cần */
+}
+
+.nav-liquid-bg svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 2. Nút tròn nổi (Floating Button) - Nhỏ và gọn hơn */
+.nav-floating-btn {
+  position: absolute;
+  top: -5px; /* Tọa độ tâm Y = 14px (Đồng tâm với rãnh cắt) */
+  width: 38px; /* Thu nhỏ để viền mỏng manh hơn */
+  height: 38px;
+  background: var(--bg-primary);
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Giảm bóng để phù hợp độ nhỏ */
+  z-index: 2;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5); /* Icon bình thường màu mờ */
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 25%;
+  position: relative;
+  height: 54px; /* Đồng bộ với height mới */
+  z-index: 10;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Active State */
+.tab-btn.active {
+  background: transparent;
+}
+
+.tab-btn.active .icon-wrapper {
+  transform: translateY(-13px); /* Căn đúng tâm nút nổi mới (bảo toàn công thức toán học) */
+  color: var(--accent);
+}
+
+.tab-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════
+   BUTTONS — Premium Gradient Style
+   ═══════════════════════════════════════ */
+.btn {
+  background: linear-gradient(135deg, #8b5e3c, #a67c52);
+  color: #fdf8f0;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 10px var(--accent-glow);
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--accent-glow);
+  filter: brightness(1.1);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger), #d06050);
+  box-shadow: 0 2px 10px rgba(185, 74, 58, 0.25);
+}
+.btn-danger:hover {
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.35);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════
+   INPUT FIELDS — Vintage Paper Inputs
+   ═══════════════════════════════════════ */
+.input-field {
+  background: #ddd0b6;
+  border: 1px solid rgba(139, 94, 60, 0.3);
+  color: #3b2f20;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.77rem;
+  outline: none;
+  transition: all var(--transition);
+}
+
+.input-field::placeholder {
+  color: #a89478;
+}
+
+.input-field:focus {
+  border-color: #8b5e3c;
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.15);
+  background: #e5d8c0;
+}
+
+select.input-field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b2f20' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center; /* Xích mũi tên qua trái */
+  background-size: 14px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+select.input-field option {
+  background: #ddd0b6;
+  color: #3b2f20;
+  padding: 8px;
+}
+
+/* ═══════════════════════════════════════
+   GLASS PANEL — Frosted Glass Cards
+   ═══════════════════════════════════════ */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: all var(--transition);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-hover);
+}
+
+/* ═══════════════════════════════════════
+   PAPER STYLES — Keep premium book aesthetic
+   ═══════════════════════════════════════ */
+.paper-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.paper {
+  background-color: #fdf8f0;
+  background-image:
+    linear-gradient(rgba(180, 150, 100, 0.07) 1px, transparent 1px);
+  background-size: 100% 21.6px;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.08),
+    0 8px 24px rgba(0,0,0,0.12),
+    inset 0 0 0 1px rgba(180, 150, 100, 0.2);
+  position: relative;
+  overflow: hidden;
+  color: #2c1a0e;
+  flex-shrink: 0;
+  border-radius: 2px 8px 8px 2px;
+  border-left: 4px solid #c9a96e;
+}
+
+.paper-content {
+  padding: 21.6px 8px 44px 16px;
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  pointer-events: none;
+  font-family: 'Lora', Georgia, serif;
+  font-size: 11.7px;
+  line-height: 21.6px;
+  color: #2c1a0e;
+}
+
+/* Page number at bottom */
+.paper-page-number {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Lora', serif;
+  font-size: 10.8px;
+  color: #a08060;
+  letter-spacing: 2px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Story title bar at top of page */
+.paper-title-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.paper-title-bar span {
+  font-family: 'Playfair Display', serif;
+  font-size: 11.7px;
+  font-style: italic;
+  color: #9a7040;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+/* ═══════════════════════════════════════
+   STORY GRID — Modern Card Layout
+   ═══════════════════════════════════════ */
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  align-content: start;
+}
+
+.story-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  position: relative;
+  box-shadow: 
+    0 12px 24px rgba(60, 40, 20, 0.15), 
+    0 4px 8px rgba(60, 40, 20, 0.1), 
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.story-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  z-index: 15;
+  pointer-events: none;
+}
+
+.story-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.05) 35%, transparent 60%);
+  pointer-events: none;
+  z-index: 10;
+  transition: background 0.3s ease;
+}
+
+.story-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 
+    0 22px 34px rgba(60, 40, 20, 0.25), 
+    0 8px 12px rgba(60, 40, 20, 0.15), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.story-card:hover::after {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 45%, transparent 70%);
+}
+
+.story-card:active {
+  transform: translateY(-12px) scale(1.04);
+  box-shadow: 
+    0 30px 45px rgba(60, 40, 20, 0.3), 
+    0 12px 18px rgba(60, 40, 20, 0.2), 
+    inset 0 2px 6px rgba(255, 255, 255, 1);
+  transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.1s ease;
+}
+
+.story-card:active::after {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 45%, transparent 70%);
+  transition: background 0.1s ease;
+}
+
+.story-card:active::before {
+  animation: shineSweep 0.7s cubic-bezier(0.1, 0, 0.3, 1) forwards;
+}
+
+@keyframes shineSweep {
+  0% { left: -100%; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: 200%; opacity: 0; }
+}
+
+.story-cover {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform var(--transition);
+}
+
+.story-card:hover .story-cover {
+  transform: scale(1.05);
+}
+
+.story-info {
+  padding: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.story-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-primary);
+}
+
+.story-meta {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ═══════════════════════════════════════
+   CONTROLS ROW
+   ═══════════════════════════════════════ */
+.controls-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════
+   FLIPBOOK — Immersive Reader
+   ═══════════════════════════════════════ */
+.flipbook-container {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(50, 35, 25, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flipbook-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.close-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  mix-blend-mode: difference;
+  cursor: pointer;
+  z-index: 1010;
+  transition: opacity var(--transition);
+}
+
+.close-btn:hover {
+  opacity: 0.7;
+}
+
+.demoPage {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  color: #333;
+}
+
+/* ═══════════════════════════════════════
+   SECTION HEADERS
+   ═══════════════════════════════════════ */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-header .badge {
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════
+   DIVIDER
+   ═══════════════════════════════════════ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+  margin: 12px 0;
+}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-in {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* ═══════════════════════════════════════
+   EMPTY STATE
+   ═══════════════════════════════════════ */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--bg-glass);
+  border: 1px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+   SPINNER ANIMATION
+   ═══════════════════════════════════════ */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

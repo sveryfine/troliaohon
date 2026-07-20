@@ -1,0 +1,12 @@
+{
+  "appId": "com.stoon.app",
+  "appName": "Stoon",
+  "webDir": "dist",
+  "plugins": {
+    "GoogleAuth": {
+      "scopes": ["profile", "email"],
+      "serverClientId": "968691557486-qa6hpffpcqpghu443ppg8trhptmtsea8.apps.googleusercontent.com",
+      "forceCodeForRefreshToken": true
+    }
+  }
+}
