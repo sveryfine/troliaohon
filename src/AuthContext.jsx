@@ -15,7 +15,7 @@ import {
 import { Capacitor } from '@capacitor/core';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import { auth, db } from './firebase';
 
 export const AuthContext = createContext();
 

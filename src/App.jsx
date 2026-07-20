@@ -1,8 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy } from 'lucide-react';
+import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy, User, Pencil, Check } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Cropper from 'react-easy-crop';
 import { Capacitor } from '@capacitor/core';
+import AuthScreen from './AuthScreen';
+import { useAuth } from './AuthContext';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from './firebase';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 const getCroppedImg = async (imageSrc, pixelCrop) => {
@@ -273,6 +277,7 @@ Quy tắc giao tiếp:
 };
 
 function App() {
+  const { user, loading } = useAuth();
   const [aiName, setAiName] = useState((localStorage.getItem('ai_name') === 'Thị Nở' ? 'CƯNG' : localStorage.getItem('ai_name')) || 'CƯNG');
   const [aiPersona, setAiPersona] = useState(localStorage.getItem('ai_persona') || 'mo_hon');
   const [aiGender, setAiGender] = useState(localStorage.getItem('ai_gender') || 'nu');
@@ -292,11 +297,14 @@ function App() {
   });
   const [currentChatId, setCurrentChatId] = useState(localStorage.getItem('ai_current_chat_id') || null);
   const [showHistory, setShowHistory] = useState(false);
+  const [editingChatId, setEditingChatId] = useState(null);
+  const [editingChatTitle, setEditingChatTitle] = useState('');
   const [showNewChatPopup, setShowNewChatPopup] = useState(false);
   const [newChatName, setNewChatName] = useState('');
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showSettings, setShowSettings] = useState(!localStorage.getItem('gemini_api_key'));
+  const [showAuth, setShowAuth] = useState(false);
   const [apiKey, setApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
   const [aiModel, setAiModel] = useState((localStorage.getItem('ai_model') === 'gemini-1.5-flash' ? '' : localStorage.getItem('ai_model')) || '');
   const [tempName, setTempName] = useState(aiName);
@@ -332,6 +340,70 @@ function App() {
   const transcriptRef = useRef('');
   const isListeningRef = useRef(false);
   const [voiceOverlayText, setVoiceOverlayText] = useState('');
+  const isOAuthUser = user?.providers?.some(p => p === 'google.com' || p === 'facebook.com');
+
+  // Tải dữ liệu từ Firebase khi đăng nhập
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user && (user.emailVerified || isOAuthUser)) {
+        try {
+          const docRef = doc(db, 'cung_ai_chats', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.history && data.history.length > 0) {
+              setChatHistory(data.history);
+              localStorage.setItem('ai_chat_history', JSON.stringify(data.history));
+              
+              const activeId = data.currentChatId || data.history[0].id;
+              setCurrentChatId(activeId);
+              localStorage.setItem('ai_current_chat_id', activeId);
+              
+              const activeChat = data.history.find(c => c.id === activeId);
+              if (activeChat) setMessages(activeChat.messages);
+            }
+          }
+        } catch (e) {
+          console.error("Lỗi tải lịch sử từ Firebase", e);
+        }
+      } else if (!user) {
+        // Đăng xuất: Xóa lịch sử local để đảm bảo riêng tư
+        setChatHistory([]);
+        localStorage.removeItem('ai_chat_history');
+        setCurrentChatId(null);
+        localStorage.removeItem('ai_current_chat_id');
+        setMessages([
+          {
+            role: 'ai', content: aiPersona === 'mo_hon' ? 'Hừm, nhà ngươi lại tìm đến có việc gì? Mau nói lẹ đi!'
+              : aiPersona === 'ngu_ngo' ? 'Dạ... hở? Cậu gọi bé có việc gì ạ? 🥺'
+                : 'Xin chào! Mình có thể giúp gì cho bạn hôm nay?'
+          }
+        ]);
+      }
+    };
+    fetchUserData();
+  }, [user, isOAuthUser, aiPersona]);
+
+  // Đồng bộ lịch sử lên Firebase khi có thay đổi
+  useEffect(() => {
+    if (user && (user.emailVerified || isOAuthUser)) {
+      const syncData = async () => {
+        try {
+          await setDoc(doc(db, 'cung_ai_chats', user.uid), {
+            history: chatHistory,
+            currentChatId: currentChatId,
+            updatedAt: new Date().toISOString()
+          }, { merge: true });
+        } catch (e) {
+          console.error("Lỗi đồng bộ Firebase", e);
+        }
+      };
+      // Chỉ đồng bộ khi chatHistory thực sự có dữ liệu
+      if (chatHistory.length > 0) {
+        syncData();
+      }
+    }
+  }, [chatHistory, currentChatId, user, isOAuthUser]);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -401,6 +473,29 @@ function App() {
     setShowNewChatPopup(true);
   };
 
+  const deleteChat = (e, id) => {
+    e.stopPropagation(); // Ngăn không cho click vào loadChat
+    setChatHistory(prev => {
+      const newHistory = prev.filter(c => c.id !== id);
+      localStorage.setItem('ai_chat_history', JSON.stringify(newHistory));
+      return newHistory;
+    });
+  };
+
+  const updateChatTitle = (e, id) => {
+    e.stopPropagation();
+    if (!editingChatTitle.trim()) {
+      setEditingChatId(null);
+      return;
+    }
+    setChatHistory(prev => {
+      const newHistory = prev.map(c => c.id === id ? { ...c, title: editingChatTitle.trim() } : c);
+      localStorage.setItem('ai_chat_history', JSON.stringify(newHistory));
+      return newHistory;
+    });
+    setEditingChatId(null);
+  };
+
   const confirmCreateNewChat = () => {
     const titleName = newChatName.trim() || "Đoạn chat mới";
 
@@ -440,17 +535,7 @@ function App() {
     setShowHistory(false);
   };
 
-  const deleteChat = (e, id) => {
-    e.stopPropagation(); // Ngăn không cho click vào loadChat
-    setChatHistory(prev => {
-      const newHistory = prev.filter(c => c.id !== id);
-      localStorage.setItem('ai_chat_history', JSON.stringify(newHistory));
-      return newHistory;
-    });
-    if (currentChatId === id) {
-      createNewChat();
-    }
-  };
+
 
   const speakText = async (text) => {
     if (!isVoiceMode) return;
@@ -903,6 +988,38 @@ function App() {
 
   const [tintStart, tintEnd] = getTintColors();
 
+  
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', height: '100vh', width: '100vw', justifyContent: 'center', alignItems: 'center', background: '#f8f9fa' }}>
+        <div style={{ width: 30, height: 30, border: '3px solid #111', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+      </div>
+    );
+  }
+  const isAuthenticated = user && (user.emailVerified || isOAuthUser);
+
+  if (!isAuthenticated || showAuth) {
+    return (
+      <div style={{ height: '100vh', width: '100vw', overflow: 'hidden', position: 'relative' }}>
+        {isAuthenticated && (
+          <button 
+             onClick={() => setShowAuth(false)}
+             style={{ 
+               position: 'absolute', top: 24, right: 24, zIndex: 9999, 
+               background: '#111', border: 'none', color: '#fff', 
+               borderRadius: '50%', padding: 8, cursor: 'pointer',
+               boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+               display: 'flex', alignItems: 'center', justifyContent: 'center'
+             }}
+          >
+            <X size={20} />
+          </button>
+        )}
+        <AuthScreen />
+      </div>
+    );
+  }
+
   return (
     <div className={`app-container ${getThemeClass()}`} style={bgImage ? {
       backgroundImage: `linear-gradient(${tintStart}, ${tintEnd}), url(${bgImage})`,
@@ -967,7 +1084,11 @@ function App() {
           }} title="Cài đặt">
             <Settings size={17} />
           </button>
+          <button className="icon-button" onClick={() => setShowAuth(true)} title="Tài khoản">
+            <User size={17} />
+          </button>
         </div>
+        
         <svg width="100%" height="32px" style={{ position: 'absolute', bottom: -32, left: 0, zIndex: 10, pointerEvents: 'none' }}>
           <defs>
             <pattern id="wave-pattern-header" x="0" y="0" width="320" height="32" patternUnits="userSpaceOnUse">
@@ -1442,55 +1563,134 @@ function App() {
         </div>
       )}
 
-      {/* Modal Lịch sử Chat */}
+      {/* Tab Lịch sử Chat (Toàn màn hình) */}
       {showHistory && (
-        <div className="modal-overlay" onClick={() => setShowHistory(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
-            <div className="modal-header">
-              <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><History size={22} color="var(--primary-color)" /> Lịch sử trò chuyện</h2>
-              <button className="icon-button" onClick={() => setShowHistory(false)}>
-                <X size={24} />
-              </button>
-            </div>
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'var(--bg-color)', zIndex: 9999,
+          display: 'flex', flexDirection: 'column',
+          animation: 'fadeIn 0.3s ease-out'
+        }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '16px 20px', background: 'var(--surface-color)',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.05)', zIndex: 10
+          }}>
+            <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', margin: 0, color: 'var(--text-main)' }}>
+              <History size={24} color="var(--primary-color)" /> Lịch sử trò chuyện
+            </h2>
+            <button className="icon-button" onClick={() => setShowHistory(false)} style={{ background: 'rgba(0,0,0,0.05)', borderRadius: '50%' }}>
+              <X size={24} />
+            </button>
+          </div>
 
-            <div style={{ overflowY: 'auto', flex: 1, paddingRight: '4px' }}>
-              {chatHistory.length === 0 ? (
-                <p style={{ textAlign: 'center', color: 'var(--text-main)', fontStyle: 'italic', marginTop: '20px' }}>Chưa có lịch sử nào.</p>
-              ) : (
-                chatHistory.map(chat => (
-                  <div
-                    key={chat.id}
-                    onClick={() => loadChat(chat)}
-                    style={{
-                      padding: '12px',
-                      background: currentChatId === chat.id ? 'var(--user-bubble)' : 'rgba(0,0,0,0.1)',
-                      borderRadius: '8px',
-                      marginBottom: '8px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      border: currentChatId === chat.id ? '1px solid var(--primary-color)' : '1px solid transparent'
-                    }}
-                  >
-                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                      {chat.title}
-                      <div style={{ fontSize: '0.7rem', opacity: 0.7, marginTop: '4px' }}>
-                        {new Date(chat.timestamp).toLocaleString('vi-VN')}
+          <div style={{
+            flex: 1, overflowY: 'auto', padding: '20px',
+            background: 'var(--bg-color)', display: 'flex', flexDirection: 'column', gap: '12px'
+          }}>
+            {chatHistory.length === 0 ? (
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.5 }}>
+                <History size={64} style={{ marginBottom: 16 }} />
+                <p style={{ fontSize: '1.1rem' }}>Chưa có lịch sử nào.</p>
+              </div>
+            ) : (
+              chatHistory.map(chat => (
+                <div
+                  key={chat.id}
+                  onClick={() => loadChat(chat)}
+                  style={{
+                    padding: '16px',
+                    background: currentChatId === chat.id 
+                      ? 'linear-gradient(135deg, rgba(102, 252, 241, 0.15) 0%, rgba(69, 162, 158, 0.05) 100%)' 
+                      : 'var(--surface-color)',
+                    borderRadius: '16px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    border: currentChatId === chat.id ? '1px solid var(--primary-color)' : '1px solid var(--glass-border)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (currentChatId !== chat.id) e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (currentChatId !== chat.id) e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div style={{ overflow: 'hidden', paddingRight: '16px', flex: 1 }}>
+                    {editingChatId === chat.id ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }} onClick={e => e.stopPropagation()}>
+                        <input
+                          type="text"
+                          autoFocus
+                          value={editingChatTitle}
+                          onChange={(e) => setEditingChatTitle(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') updateChatTitle(e, chat.id);
+                            if (e.key === 'Escape') setEditingChatId(null);
+                          }}
+                          style={{
+                            flex: 1, padding: '4px 8px', borderRadius: '4px',
+                            border: '1px solid var(--primary-color)', background: 'var(--bg-color)',
+                            color: 'var(--text-main)', outline: 'none', fontSize: '1rem'
+                          }}
+                        />
                       </div>
+                    ) : (
+                      <div style={{ 
+                        color: currentChatId === chat.id ? 'var(--primary-color)' : 'var(--text-main)', 
+                        fontSize: '1.05rem', fontWeight: 600, 
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '6px' 
+                      }}>
+                        {chat.title}
+                      </div>
+                    )}
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-main)', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: currentChatId === chat.id ? 'var(--primary-color)' : '#888' }} />
+                      {new Date(chat.timestamp).toLocaleString('vi-VN')}
                     </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {editingChatId === chat.id ? (
+                      <button
+                        className="icon-button"
+                        onClick={(e) => updateChatTitle(e, chat.id)}
+                        style={{ padding: '8px', background: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', borderRadius: '50%', flexShrink: 0 }}
+                        title="Lưu tên mới"
+                      >
+                        <Check size={20} />
+                      </button>
+                    ) : (
+                      <button
+                        className="icon-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingChatTitle(chat.title);
+                          setEditingChatId(chat.id);
+                        }}
+                        style={{ padding: '8px', background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-main)', borderRadius: '50%', flexShrink: 0 }}
+                        title="Đổi tên đoạn chat"
+                      >
+                        <Pencil size={20} />
+                      </button>
+                    )}
                     <button
                       className="icon-button"
                       onClick={(e) => deleteChat(e, chat.id)}
-                      style={{ padding: '4px', background: 'transparent' }}
+                      style={{ 
+                        padding: '8px', background: 'rgba(255, 68, 68, 0.1)', color: '#ff4444', 
+                        borderRadius: '50%', flexShrink: 0 
+                      }}
                       title="Xóa đoạn chat này"
                     >
-                      <Trash2 size={18} color="#ff4444" />
+                      <Trash2 size={20} />
                     </button>
                   </div>
-                ))
-              )}
-            </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}

@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { User, Lock, LogIn, UserPlus, Mail, LogOut, AlertCircle, CheckCircle, Eye, EyeOff, Loader, RefreshCw, Shield, Calendar, AtSign, Fingerprint } from 'lucide-react';
-import { AuthContext } from '../store/AuthContext';
+import { AuthContext } from './AuthContext';
 import { NativeBiometric } from '@capgo/capacitor-native-biometric';
-import logoApp from '../../assets/logoapp.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ═══════════════════════════════════════
@@ -483,111 +482,7 @@ export default function ProfileTab() {
     <div className="profile-root">
       <style>{profileStyles}</style>
       <div className="profile-bg" />
-      {/* Vùng chứa gốc căn giữa */}
-      <div style={{ position: 'absolute', bottom: 30, left: '50%', transform: 'translateX(-50%)', zIndex: 10, animation: 'profileFadeIn 0.4s ease-out' }}>
-        
-        {/* Wrapper di chuyển của logo */}
-        <motion.div
-          animate={{ x: logoPos.x, y: logoPos.y }}
-          transition={{ type: "spring", stiffness: 250, damping: 18 }}
-          style={{ position: 'relative' }}
-        >
-          {/* Vệt đen mực loang (Ink smudge) */}
-          <AnimatePresence>
-          {!isExploding && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, scale: 0, transition: { duration: 0.2 } }}
-              style={{
-                position: 'absolute',
-                bottom: -1,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '120%',
-                height: 48,
-                background: '#000',
-                filter: 'blur(12px)',
-                boxShadow: '0 0 24px 12px #000',
-                borderRadius: '50%',
-                zIndex: 9
-              }} 
-            />
-          )}
-        </AnimatePresence>
-        
-        {/* Logo và Hiệu ứng hạt nổ */}
-        <div style={{ animation: 'profileFloat 3s ease-in-out infinite', position: 'relative', zIndex: 10, cursor: 'pointer', touchAction: 'none' }}>
-          <AnimatePresence>
-            {!isExploding && (
-              <motion.img 
-                src={logoApp} 
-                alt="Logo" 
-                onPointerDown={handlePointerDown}
-                onPointerUp={handlePointerUp}
-                onPointerLeave={handlePointerUp}
-                onPointerCancel={handlePointerUp}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1, rotate: 0 }}
-                exit={{ 
-                  scale: [2.2, 4.5], 
-                  opacity: [1, 0], 
-                  filter: ['blur(0px)', 'blur(10px)'], 
-                  transition: { duration: 0.4, ease: "easeOut" } 
-                }}
-                whileHover={{ scale: 1.05, rotate: 2 }}
-                whileTap={{ scale: 2.2, transition: { duration: 1.5, ease: "easeInOut" } }}
-                style={{
-                  height: 40,
-                  objectFit: 'contain',
-                  display: 'block'
-                }} 
-              />
-            )}
-          </AnimatePresence>
-        </div>
 
-        {/* Mảnh vỡ nổ tung */}
-        {isExploding && Array.from({ length: 80 }).map((_, i) => {
-          const angle = (Math.PI * 2 * i) / 80;
-          const distance = 40 + Math.random() * 180;
-          const x = Math.cos(angle) * distance;
-          const y = Math.sin(angle) * distance;
-          const colors = ['#000000', '#222222', '#ef4444', '#dc2626', '#06b6d4', '#0891b2', '#ffffff'];
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          const size = 1.5 + Math.random() * 4.5; // Hạt siêu nhỏ
-          const blur = Math.random() > 0.6 ? `blur(${Math.random() * 2}px)` : 'none'; // Thêm blur nhẹ
-          
-          return (
-            <motion.div
-              key={i}
-              initial={{ x: 0, y: 0, scale: 0, opacity: 1, rotate: 0, filter: blur }}
-              animate={{ 
-                x: x, 
-                y: y, 
-                scale: [0, 1.8, 0], 
-                opacity: [1, 1, 0],
-                rotate: Math.random() * 720 - 360
-              }}
-              transition={{ duration: 0.8 + Math.random() * 0.7, ease: [0.25, 1, 0.5, 1] }}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: size,
-                height: size,
-                marginTop: -size/2,
-                marginLeft: -size/2,
-                borderRadius: i % 3 === 0 ? '50%' : i % 3 === 1 ? '3px' : '50% 0 50% 0',
-                backgroundColor: color,
-                zIndex: 20,
-                pointerEvents: 'none'
-              }}
-            />
-          );
-        })}
-        </motion.div>
-      </div>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '20px 0' }}>
 
