@@ -2429,7 +2429,6 @@ function App() {
             ) : (
               <div className="avatar">{getInitials(aiName)}</div>
             )}
-            <div className="online-dot"></div>
           </div>
           <div className="title-text">
             <h1>{aiName}</h1>
