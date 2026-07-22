@@ -1455,7 +1455,8 @@ function App() {
               directory: Directory.Data
             });
             if (!AVATAR_FRAMES.find(frame => frame.id === fName)) {
-              AVATAR_FRAMES.push({ id: fName, label: 'Khung Của Bạn', img: contents.data });
+              // Chèn khung lưu từ máy vào ngay sau "Cơ bản" (index 1)
+              AVATAR_FRAMES.splice(1, 0, { id: fName, label: 'Khung Của Bạn', img: contents.data });
             }
           }
         }
@@ -2960,7 +2961,8 @@ function App() {
                                     directory: Directory.Data
                                   });
                                   
-                                  AVATAR_FRAMES.push({ id: customId, label: 'Khung Của Bạn', img: base64Data });
+                                  // Chèn khung mới tải lên vào ngay sau "Cơ bản" (index 1)
+                                  AVATAR_FRAMES.splice(1, 0, { id: customId, label: 'Khung Của Bạn', img: base64Data });
                                   setTempAvatarFrame(customId);
                                   
                                   labelSpan.innerText = originalText;
