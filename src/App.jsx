@@ -2917,7 +2917,25 @@ function App() {
                 </div>
 
                 <div className="form-group">
-                  <label>Kho khung Avatar:</label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ margin: 0 }}>Kho khung Avatar:</label>
+                    <button 
+                      onClick={saveSettings} 
+                      style={{ 
+                        padding: '6px 16px', 
+                        background: 'var(--primary-color)', 
+                        color: '#000', 
+                        borderRadius: '8px', 
+                        fontWeight: 'bold', 
+                        border: 'none', 
+                        cursor: 'pointer',
+                        fontSize: '0.8rem',
+                        boxShadow: '0 2px 8px rgba(102, 252, 241, 0.3)'
+                      }}
+                    >
+                      Lưu Nhanh
+                    </button>
+                  </div>
 
                   <div style={{
                     display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
