@@ -141,8 +141,8 @@ body {
 }
 
 .avatar {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
   display: flex;
@@ -150,13 +150,13 @@ body {
   justify-content: center;
   color: #111;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.14rem;
   box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
 }
 
 .avatar-img {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
@@ -174,14 +174,14 @@ body {
 }
 
 .title-text h1 {
-  font-size: 1.2rem;
+  font-size: 1.14rem;
   color: var(--text-main);
   font-weight: 600;
   margin: 0;
 }
 
 .title-text p {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   color: var(--primary-color);
   margin: 0;
 }
