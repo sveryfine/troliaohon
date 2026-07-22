@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy, User, Pencil, Check, BookOpen, Brain, GraduationCap, ChevronDown, Save } from 'lucide-react';
+import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy, User, Pencil, Check, BookOpen, Brain, GraduationCap, ChevronDown, Download } from 'lucide-react';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import Cropper from 'react-easy-crop';
 import { Capacitor } from '@capacitor/core';
@@ -2945,7 +2945,7 @@ function App() {
                         e.currentTarget.style.color = 'var(--primary-color)';
                       }}
                     >
-                      <Save size={16} />
+                      <Download size={16} />
                     </button>
                   </div>
 
