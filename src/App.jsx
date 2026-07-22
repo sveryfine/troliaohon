@@ -3,6 +3,7 @@ import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camer
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import Cropper from 'react-easy-crop';
 import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import AuthScreen from './AuthScreen';
 import { useAuth } from './AuthContext';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -1435,6 +1436,38 @@ const ORIGINAL_CLOUD_PATH = "M 12 55 C 2 55 0 45 7 38 C 2 25 13 12 28 12 C 32 2 
 
 function App() {
   const { user, loading } = useAuth();
+  
+  // Load các khung ảnh custom đã lưu trong máy (Capacitor Filesystem / IndexedDB)
+  const [localFramesLoaded, setLocalFramesLoaded] = useState(false);
+  useEffect(() => {
+    const loadSavedFrames = async () => {
+      try {
+        const res = await Filesystem.readdir({
+          path: '',
+          directory: Directory.Data
+        });
+        const files = res.files || [];
+        for (const f of files) {
+          const fName = typeof f === 'string' ? f : f.name;
+          if (fName.startsWith('custom_frame_')) {
+            const contents = await Filesystem.readFile({
+              path: fName,
+              directory: Directory.Data
+            });
+            if (!AVATAR_FRAMES.find(frame => frame.id === fName)) {
+              AVATAR_FRAMES.push({ id: fName, label: 'Khung Của Bạn', img: contents.data });
+            }
+          }
+        }
+        setLocalFramesLoaded(true);
+      } catch (error) {
+        console.error("Lỗi khi load khung từ bộ nhớ máy:", error);
+        setLocalFramesLoaded(true);
+      }
+    };
+    loadSavedFrames();
+  }, []);
+
   const [aiName, setAiName] = useState(() => {
     const saved = localStorage.getItem('ai_name');
     if (saved && (saved.includes('Thị') || saved.includes('Nở'))) return 'CƯNG';
@@ -2905,15 +2938,43 @@ function App() {
                         id="frameUploadInput" 
                         accept="image/gif, image/png, image/webp, image/apng" 
                         style={{ display: 'none' }}
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const file = e.target.files[0];
                           if (file) {
-                            // Dùng URL.createObjectURL để giữ nguyên vẹn định dạng gốc (kể cả APNG) thay vì mã hóa base64
-                            const objectUrl = URL.createObjectURL(file);
-                            const customId = 'custom_' + Date.now();
-                            AVATAR_FRAMES.push({ id: customId, label: 'Khung Tự Tạo', img: objectUrl });
-                            setTempAvatarFrame(customId);
+                            try {
+                              const labelSpan = e.target.previousSibling;
+                              const originalText = labelSpan.innerText;
+                              labelSpan.innerText = "Đang lưu máy...";
+                              
+                              const reader = new FileReader();
+                              reader.readAsDataURL(file);
+                              reader.onload = async () => {
+                                try {
+                                  const base64Data = reader.result;
+                                  const customId = 'custom_frame_' + Date.now() + '.txt';
+                                  
+                                  // Lưu vĩnh viễn vào bộ nhớ điện thoại (Filesystem / IndexedDB)
+                                  await Filesystem.writeFile({
+                                    path: customId,
+                                    data: base64Data,
+                                    directory: Directory.Data
+                                  });
+                                  
+                                  AVATAR_FRAMES.push({ id: customId, label: 'Khung Của Bạn', img: base64Data });
+                                  setTempAvatarFrame(customId);
+                                  
+                                  labelSpan.innerText = originalText;
+                                } catch (err) {
+                                  alert("Lỗi lưu khung! Bộ nhớ máy có thể đã đầy.");
+                                  labelSpan.innerText = originalText;
+                                }
+                              };
+                            } catch (error) {
+                              alert("Lỗi không xác định khi đọc file.");
+                              e.target.previousSibling.innerText = "Tải Khung";
+                            }
                           }
+                          e.target.value = ''; // Reset input
                         }}
                       />
                     </div>
