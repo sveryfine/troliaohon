@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy, User, Pencil, Check, BookOpen, Brain, GraduationCap, ChevronDown } from 'lucide-react';
+import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy, User, Pencil, Check, BookOpen, Brain, GraduationCap, ChevronDown, Save } from 'lucide-react';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import Cropper from 'react-easy-crop';
 import { Capacitor } from '@capacitor/core';
@@ -2921,19 +2921,31 @@ function App() {
                     <label style={{ margin: 0 }}>Kho khung Avatar:</label>
                     <button 
                       onClick={saveSettings} 
+                      title="Lưu cài đặt nhanh"
                       style={{ 
-                        padding: '6px 16px', 
-                        background: 'var(--primary-color)', 
-                        color: '#000', 
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'rgba(102, 252, 241, 0.1)', 
+                        color: 'var(--primary-color)', 
                         borderRadius: '8px', 
-                        fontWeight: 'bold', 
-                        border: 'none', 
+                        border: '1px solid var(--primary-color)', 
                         cursor: 'pointer',
-                        fontSize: '0.8rem',
-                        boxShadow: '0 2px 8px rgba(102, 252, 241, 0.3)'
+                        transition: 'all 0.2s',
+                        boxShadow: '0 2px 8px rgba(102, 252, 241, 0.15)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'var(--primary-color)';
+                        e.currentTarget.style.color = '#000';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(102, 252, 241, 0.1)';
+                        e.currentTarget.style.color = 'var(--primary-color)';
                       }}
                     >
-                      Lưu Nhanh
+                      <Save size={16} />
                     </button>
                   </div>
 
