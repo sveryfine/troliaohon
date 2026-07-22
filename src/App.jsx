@@ -1277,7 +1277,11 @@ const renderAvatarFrame = (fid, lazy = false) => {
 
   const isCustomOrDecoration = frame.img && (frame.img.includes('/decorations/') || frame.img.startsWith('data:') || frame.img.startsWith('blob:'));
   const baseStyle = {
-    position: 'absolute', top: '-35%', left: '-35%', width: '170%', height: '170%',
+    position: 'absolute', 
+    top: isCustomOrDecoration ? '-10%' : '-35%', 
+    left: isCustomOrDecoration ? '-10%' : '-35%', 
+    width: isCustomOrDecoration ? '120%' : '170%', 
+    height: isCustomOrDecoration ? '120%' : '170%',
     pointerEvents: 'none', zIndex: 3, objectFit: 'contain',
     mixBlendMode: isCustomOrDecoration ? 'normal' : 'screen'
   };
