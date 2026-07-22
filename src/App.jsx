@@ -216,27 +216,1096 @@ async function getEdgeTTSAudio(text, voice = 'vi-VN-HoaiMyNeural') {
 
 const AVATAR_FRAMES = [
   { id: 'none', label: 'Cơ bản', img: null },
-  { id: 'cosmic', label: 'Vũ Trụ', img: '/frames/cosmic.png' },
-  { id: 'fire', label: 'Ngọn Lửa', img: '/frames/fire.png' },
-  { id: 'cat', label: 'Tai Mèo', img: '/frames/cat.png' },
-  { id: 'royal', label: 'Hoàng Gia', img: '/frames/royal.png' },
-  { id: 'angel', label: 'Thiên Thần', img: '/frames/angel.png' },
-  { id: 'ghost', label: 'Bóng Ma', img: '/frames/ghost.png' },
-  { id: 'lightning', label: 'Sấm Sét', img: '/frames/lightning.png' },
-  { id: 'sakura', label: 'Hoa Anh Đào', img: '/frames/sakura.png' },
-  { id: 'devil', label: 'Ác Quỷ', img: '/frames/devil.png' },
-  { id: 'ocean', label: 'Đại Dương', img: '/frames/ocean.png' },
+
+  {
+    "id": "akuma",
+    "label": "Akuma",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/akuma.png"
+  },
+  {
+    "id": "arcane_sigil",
+    "label": "Arcane Sigil",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/arcane_sigil.png"
+  },
+  {
+    "id": "aurora",
+    "label": "Aurora",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/aurora.png"
+  },
+  {
+    "id": "autumns_arbor",
+    "label": "Autumns Arbor",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/autumns_arbor.png"
+  },
+  {
+    "id": "autumns_arbor_aurora",
+    "label": "Autumns Arbor Aurora",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/autumns_arbor_aurora.png"
+  },
+  {
+    "id": "autumn_crown",
+    "label": "Autumn Crown",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/autumn_crown.png"
+  },
+  {
+    "id": "a_hint_of_clove",
+    "label": "A Hint Of Clove",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/a_hint_of_clove.png"
+  },
+  {
+    "id": "baby_displacer_beast",
+    "label": "Baby Displacer Beast",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/baby_displacer_beast.png"
+  },
+  {
+    "id": "batarang",
+    "label": "Batarang",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/batarang.png"
+  },
+  {
+    "id": "blade_storm",
+    "label": "Blade Storm",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/blade_storm.png"
+  },
+  {
+    "id": "bloodthirsty",
+    "label": "Bloodthirsty",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bloodthirsty.png"
+  },
+  {
+    "id": "bloodthirsty_gold",
+    "label": "Bloodthirsty Gold",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bloodthirsty_gold.png"
+  },
+  {
+    "id": "bloodthirsty_green",
+    "label": "Bloodthirsty Green",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bloodthirsty_green.png"
+  },
+  {
+    "id": "bloomling",
+    "label": "Bloomling",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bloomling.png"
+  },
+  {
+    "id": "bowler_hat",
+    "label": "Bowler Hat",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bowler_hat.png"
+  },
+  {
+    "id": "brass_beats",
+    "label": "Brass Beats",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/brass_beats.png"
+  },
+  {
+    "id": "bubble_tea",
+    "label": "Bubble Tea",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bubble_tea.png"
+  },
+  {
+    "id": "bunny",
+    "label": "Bunny",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bunny.png"
+  },
+  {
+    "id": "bunny_zzzs",
+    "label": "Bunny Zzzs",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bunny_zzzs.png"
+  },
+  {
+    "id": "burnt_toast",
+    "label": "Burnt Toast",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/burnt_toast.png"
+  },
+  {
+    "id": "bush_camper",
+    "label": "Bush Camper",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/bush_camper.png"
+  },
+  {
+    "id": "cammy",
+    "label": "Cammy",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/cammy.png"
+  },
+  {
+    "id": "candlelight",
+    "label": "Candlelight",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/candlelight.png"
+  },
+  {
+    "id": "candlelight_crimson",
+    "label": "Candlelight Crimson",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/candlelight_crimson.png"
+  },
+  {
+    "id": "candlelight_dark",
+    "label": "Candlelight Dark",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/candlelight_dark.png"
+  },
+  {
+    "id": "cattiva",
+    "label": "Cattiva",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/cattiva.png"
+  },
+  {
+    "id": "cat_ear_headset",
+    "label": "Cat Ear Headset",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/cat_ear_headset.png"
+  },
+  {
+    "id": "chillet",
+    "label": "Chillet",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/chillet.png"
+  },
+  {
+    "id": "chrysanthemums_morning",
+    "label": "Chrysanthemums Morning",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/chrysanthemums_morning.png"
+  },
+  {
+    "id": "chrysanthemums_twilight",
+    "label": "Chrysanthemums Twilight",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/chrysanthemums_twilight.png"
+  },
+  {
+    "id": "chun_li",
+    "label": "Chun Li",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/chun_li.png"
+  },
+  {
+    "id": "clyde_invaders",
+    "label": "Clyde Invaders",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/clyde_invaders.png"
+  },
+  {
+    "id": "cottage_home",
+    "label": "Cottage Home",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/cottage_home.png"
+  },
+  {
+    "id": "cozy_post_it",
+    "label": "Cozy Post It",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/cozy_post_it.png"
+  },
+  {
+    "id": "cozy_post_it_festive",
+    "label": "Cozy Post It Festive",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/cozy_post_it_festive.png"
+  },
+  {
+    "id": "crystal_ball_blue",
+    "label": "Crystal Ball Blue",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/crystal_ball_blue.png"
+  },
+  {
+    "id": "crystal_ball_purple",
+    "label": "Crystal Ball Purple",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/crystal_ball_purple.png"
+  },
+  {
+    "id": "crystal_elk",
+    "label": "Crystal Elk",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/crystal_elk.png"
+  },
+  {
+    "id": "cypher_neural_theft",
+    "label": "Cypher Neural Theft",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/cypher_neural_theft.png"
+  },
+  {
+    "id": "dancing_fairies",
+    "label": "Dancing Fairies",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/dancing_fairies.png"
+  },
+  {
+    "id": "deaths_edge",
+    "label": "Deaths Edge",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/deaths_edge.png"
+  },
+  {
+    "id": "defensive_shield",
+    "label": "Defensive Shield",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/defensive_shield.png"
+  },
+  {
+    "id": "depresso",
+    "label": "Depresso",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/depresso.png"
+  },
+  {
+    "id": "dice_azure",
+    "label": "Dice Azure",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/dice_azure.png"
+  },
+  {
+    "id": "dice_violet",
+    "label": "Dice Violet",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/dice_violet.png"
+  },
+  {
+    "id": "dragons_smile",
+    "label": "Dragons Smile",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/dragons_smile.png"
+  },
+  {
+    "id": "dusk_and_dawn",
+    "label": "Dusk And Dawn",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/dusk_and_dawn.png"
+  },
+  {
+    "id": "eldritch_ring",
+    "label": "Eldritch Ring",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/eldritch_ring.png"
+  },
+  {
+    "id": "faces_of_the_moon",
+    "label": "Faces Of The Moon",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/faces_of_the_moon.png"
+  },
+  {
+    "id": "fairy_sprites",
+    "label": "Fairy Sprites",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fairy_sprites.png"
+  },
+  {
+    "id": "fairy_sprites_blue",
+    "label": "Fairy Sprites Blue",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fairy_sprites_blue.png"
+  },
+  {
+    "id": "fairy_sprites_pink",
+    "label": "Fairy Sprites Pink",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fairy_sprites_pink.png"
+  },
+  {
+    "id": "fall_leaves",
+    "label": "Fall Leaves",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fall_leaves.png"
+  },
+  {
+    "id": "fall_leaves_scarlet",
+    "label": "Fall Leaves Scarlet",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fall_leaves_scarlet.png"
+  },
+  {
+    "id": "fall_leaves_woodland",
+    "label": "Fall Leaves Woodland",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fall_leaves_woodland.png"
+  },
+  {
+    "id": "fan_flourish",
+    "label": "Fan Flourish",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fan_flourish.png"
+  },
+  {
+    "id": "feelin_awe",
+    "label": "Feelin Awe",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/feelin_awe.png"
+  },
+  {
+    "id": "feelin_nervous",
+    "label": "Feelin Nervous",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/feelin_nervous.png"
+  },
+  {
+    "id": "feelin_panic",
+    "label": "Feelin Panic",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/feelin_panic.png"
+  },
+  {
+    "id": "feelin_scrumptious",
+    "label": "Feelin Scrumptious",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/feelin_scrumptious.png"
+  },
+  {
+    "id": "firecrackers",
+    "label": "Firecrackers",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/firecrackers.png"
+  },
+  {
+    "id": "fishbones",
+    "label": "Fishbones",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fishbones.png"
+  },
+  {
+    "id": "flame_chompers",
+    "label": "Flame Chompers",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/flame_chompers.png"
+  },
+  {
+    "id": "flaming_sword",
+    "label": "Flaming Sword",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/flaming_sword.png"
+  },
+  {
+    "id": "floral_harmony",
+    "label": "Floral Harmony",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/floral_harmony.png"
+  },
+  {
+    "id": "floral_harmony_sunburst",
+    "label": "Floral Harmony Sunburst",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/floral_harmony_sunburst.png"
+  },
+  {
+    "id": "flower_clouds",
+    "label": "Flower Clouds",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/flower_clouds.png"
+  },
+  {
+    "id": "flux_alchemy",
+    "label": "Flux Alchemy",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/flux_alchemy.png"
+  },
+  {
+    "id": "fox_hat",
+    "label": "Fox Hat",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fox_hat.png"
+  },
+  {
+    "id": "fox_hat_chestnut",
+    "label": "Fox Hat Chestnut",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fox_hat_chestnut.png"
+  },
+  {
+    "id": "fox_hat_snow",
+    "label": "Fox Hat Snow",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fox_hat_snow.png"
+  },
+  {
+    "id": "frag_out",
+    "label": "Frag Out",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/frag_out.png"
+  },
+  {
+    "id": "freezer_bunny_lovebug",
+    "label": "Freezer Bunny Lovebug",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/freezer_bunny_lovebug.png"
+  },
+  {
+    "id": "fresh_pine",
+    "label": "Fresh Pine",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fresh_pine.png"
+  },
+  {
+    "id": "fresh_pine_cinnamon",
+    "label": "Fresh Pine Cinnamon",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fresh_pine_cinnamon.png"
+  },
+  {
+    "id": "fresh_pine_ribbon",
+    "label": "Fresh Pine Ribbon",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fresh_pine_ribbon.png"
+  },
+  {
+    "id": "fried_egg",
+    "label": "Fried Egg",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fried_egg.png"
+  },
+  {
+    "id": "frog_angry",
+    "label": "Frog Angry",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/frog_angry.png"
+  },
+  {
+    "id": "frog_derpy",
+    "label": "Frog Derpy",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/frog_derpy.png"
+  },
+  {
+    "id": "fuchsia_agent",
+    "label": "Fuchsia Agent",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/fuchsia_agent.png"
+  },
+  {
+    "id": "gary_the_snail",
+    "label": "Gary The Snail",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/gary_the_snail.png"
+  },
+  {
+    "id": "gelatinous_cube_blue",
+    "label": "Gelatinous Cube Blue",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/gelatinous_cube_blue.png"
+  },
+  {
+    "id": "gelatinous_cube_green",
+    "label": "Gelatinous Cube Green",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/gelatinous_cube_green.png"
+  },
+  {
+    "id": "glowing_runes",
+    "label": "Glowing Runes",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/glowing_runes.png"
+  },
+  {
+    "id": "goblin_stinkums",
+    "label": "Goblin Stinkums",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/goblin_stinkums.png"
+  },
+  {
+    "id": "green_fried_egg",
+    "label": "Green Fried Egg",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/green_fried_egg.png"
+  },
+  {
+    "id": "group_hug",
+    "label": "Group Hug",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/group_hug.png"
+  },
+  {
+    "id": "guile",
+    "label": "Guile",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/guile.png"
+  },
+  {
+    "id": "hailey",
+    "label": "Hailey",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/hailey.png"
+  },
+  {
+    "id": "heart_to_heart",
+    "label": "Heart To Heart",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/heart_to_heart.png"
+  },
+  {
+    "id": "hex_lights",
+    "label": "Hex Lights",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/hex_lights.png"
+  },
+  {
+    "id": "hood_crimson",
+    "label": "Hood Crimson",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/hood_crimson.png"
+  },
+  {
+    "id": "hood_dark",
+    "label": "Hood Dark",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/hood_dark.png"
+  },
+  {
+    "id": "hot_shot",
+    "label": "Hot Shot",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/hot_shot.png"
+  },
+  {
+    "id": "imagination",
+    "label": "Imagination",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/imagination.png"
+  },
+  {
+    "id": "im_a_clown",
+    "label": "Im A Clown",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/im_a_clown.png"
+  },
+  {
+    "id": "jeff_the_land_shark",
+    "label": "Jeff The Land Shark",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/jeff_the_land_shark.png"
+  },
+  {
+    "id": "joystick",
+    "label": "Joystick",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/joystick.png"
+  },
+  {
+    "id": "juri",
+    "label": "Juri",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/juri.png"
+  },
+  {
+    "id": "kabuto",
+    "label": "Kabuto",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/kabuto.png"
+  },
+  {
+    "id": "ken",
+    "label": "Ken",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/ken.png"
+  },
+  {
+    "id": "kitsune",
+    "label": "Kitsune",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/kitsune.png"
+  },
+  {
+    "id": "koi_pond",
+    "label": "Koi Pond",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/koi_pond.png"
+  },
+  {
+    "id": "lamball",
+    "label": "Lamball",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/lamball.png"
+  },
+  {
+    "id": "lofi_girl_outfit",
+    "label": "Lofi Girl Outfit",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/lofi_girl_outfit.png"
+  },
+  {
+    "id": "los_santos",
+    "label": "Los Santos",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/los_santos.png"
+  },
+  {
+    "id": "lotus_flower",
+    "label": "Lotus Flower",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/lotus_flower.png"
+  },
+  {
+    "id": "lucky_envelopes",
+    "label": "Lucky Envelopes",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/lucky_envelopes.png"
+  },
+  {
+    "id": "lunar_lanterns",
+    "label": "Lunar Lanterns",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/lunar_lanterns.png"
+  },
+  {
+    "id": "magical_potion",
+    "label": "Magical Potion",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/magical_potion.png"
+  },
+  {
+    "id": "magical_wand_green",
+    "label": "Magical Wand Green",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/magical_wand_green.png"
+  },
+  {
+    "id": "magical_wand_purple",
+    "label": "Magical Wand Purple",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/magical_wand_purple.png"
+  },
+  {
+    "id": "magic_portal_blue",
+    "label": "Magic Portal Blue",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/magic_portal_blue.png"
+  },
+  {
+    "id": "magic_portal_purple",
+    "label": "Magic Portal Purple",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/magic_portal_purple.png"
+  },
+  {
+    "id": "malefic_crown",
+    "label": "Malefic Crown",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/malefic_crown.png"
+  },
+  {
+    "id": "mallow_jump",
+    "label": "Mallow Jump",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/mallow_jump.png"
+  },
+  {
+    "id": "mech_flora",
+    "label": "Mech Flora",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/mech_flora.png"
+  },
+  {
+    "id": "mermaid_serenade",
+    "label": "Mermaid Serenade",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/mermaid_serenade.png"
+  },
+  {
+    "id": "midnight_sorceress",
+    "label": "Midnight Sorceress",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/midnight_sorceress.png"
+  },
+  {
+    "id": "mokoko",
+    "label": "Mokoko",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/mokoko.png"
+  },
+  {
+    "id": "mooncaps_blue",
+    "label": "Mooncaps Blue",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/mooncaps_blue.png"
+  },
+  {
+    "id": "mooncaps_pink",
+    "label": "Mooncaps Pink",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/mooncaps_pink.png"
+  },
+  {
+    "id": "morning_coffee",
+    "label": "Morning Coffee",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/morning_coffee.png"
+  },
+  {
+    "id": "musclebob",
+    "label": "Musclebob",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/musclebob.png"
+  },
+  {
+    "id": "m_bison",
+    "label": "M Bison",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/m_bison.png"
+  },
+  {
+    "id": "neon_nibbles",
+    "label": "Neon Nibbles",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/neon_nibbles.png"
+  },
+  {
+    "id": "new_year_2025",
+    "label": "New Year 2025",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/new_year_2025.png"
+  },
+  {
+    "id": "omens_cowl",
+    "label": "Omens Cowl",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/omens_cowl.png"
+  },
+  {
+    "id": "oni_mask",
+    "label": "Oni Mask",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/oni_mask.png"
+  },
+  {
+    "id": "owlbear_cub",
+    "label": "Owlbear Cub",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/owlbear_cub.png"
+  },
+  {
+    "id": "owlbear_cub_snowy",
+    "label": "Owlbear Cub Snowy",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/owlbear_cub_snowy.png"
+  },
+  {
+    "id": "pal_sphere",
+    "label": "Pal Sphere",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/pal_sphere.png"
+  },
+  {
+    "id": "patrick_star",
+    "label": "Patrick Star",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/patrick_star.png"
+  },
+  {
+    "id": "phoenix",
+    "label": "Phoenix",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/phoenix.png"
+  },
+  {
+    "id": "pipedream",
+    "label": "Pipedream",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/pipedream.png"
+  },
+  {
+    "id": "playful_lofi_cat",
+    "label": "Playful Lofi Cat",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/playful_lofi_cat.png"
+  },
+  {
+    "id": "polar_bear_hat",
+    "label": "Polar Bear Hat",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/polar_bear_hat.png"
+  },
+  {
+    "id": "powered_by_shimmer",
+    "label": "Powered By Shimmer",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/powered_by_shimmer.png"
+  },
+  {
+    "id": "red_lantern",
+    "label": "Red Lantern",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/red_lantern.png"
+  },
+  {
+    "id": "reynas_leer",
+    "label": "Reynas Leer",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/reynas_leer.png"
+  },
+  {
+    "id": "rift_butterfly",
+    "label": "Rift Butterfly",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/rift_butterfly.png"
+  },
+  {
+    "id": "ryu",
+    "label": "Ryu",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/ryu.png"
+  },
+  {
+    "id": "sakura",
+    "label": "Sakura",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sakura.png"
+  },
+  {
+    "id": "sakura_gyoiko",
+    "label": "Sakura Gyoiko",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sakura_gyoiko.png"
+  },
+  {
+    "id": "sakura_ink",
+    "label": "Sakura Ink",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sakura_ink.png"
+  },
+  {
+    "id": "sakura_pink",
+    "label": "Sakura Pink",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sakura_pink.png"
+  },
+  {
+    "id": "sakura_ukon",
+    "label": "Sakura Ukon",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sakura_ukon.png"
+  },
+  {
+    "id": "sakura_warrior",
+    "label": "Sakura Warrior",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sakura_warrior.png"
+  },
+  {
+    "id": "sandy_cheeks",
+    "label": "Sandy Cheeks",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sandy_cheeks.png"
+  },
+  {
+    "id": "santa_cat_ears",
+    "label": "Santa Cat Ears",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/santa_cat_ears.png"
+  },
+  {
+    "id": "selyne",
+    "label": "Selyne",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/selyne.png"
+  },
+  {
+    "id": "shadow",
+    "label": "Shadow",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/shadow.png"
+  },
+  {
+    "id": "shield_potion",
+    "label": "Shield Potion",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/shield_potion.png"
+  },
+  {
+    "id": "shurikens_mask",
+    "label": "Shurikens Mask",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/shurikens_mask.png"
+  },
+  {
+    "id": "skull_medallion",
+    "label": "Skull Medallion",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/skull_medallion.png"
+  },
+  {
+    "id": "sleepy_chilledcow",
+    "label": "Sleepy Chilledcow",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sleepy_chilledcow.png"
+  },
+  {
+    "id": "slither_n_snack",
+    "label": "Slither N Snack",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/slither_n_snack.png"
+  },
+  {
+    "id": "snakes_hug",
+    "label": "Snakes Hug",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/snakes_hug.png"
+  },
+  {
+    "id": "snowfall",
+    "label": "Snowfall",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/snowfall.png"
+  },
+  {
+    "id": "snowglobe",
+    "label": "Snowglobe",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/snowglobe.png"
+  },
+  {
+    "id": "snowglobe_blue",
+    "label": "Snowglobe Blue",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/snowglobe_blue.png"
+  },
+  {
+    "id": "snowglobe_green",
+    "label": "Snowglobe Green",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/snowglobe_green.png"
+  },
+  {
+    "id": "snowglobe_pink",
+    "label": "Snowglobe Pink",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/snowglobe_pink.png"
+  },
+  {
+    "id": "snowglobe_wood",
+    "label": "Snowglobe Wood",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/snowglobe_wood.png"
+  },
+  {
+    "id": "spongebob",
+    "label": "Spongebob",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/spongebob.png"
+  },
+  {
+    "id": "spooky_cat_ears",
+    "label": "Spooky Cat Ears",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/spooky_cat_ears.png"
+  },
+  {
+    "id": "spooky_cat_ears_midnight",
+    "label": "Spooky Cat Ears Midnight",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/spooky_cat_ears_midnight.png"
+  },
+  {
+    "id": "sproutling",
+    "label": "Sproutling",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/sproutling.png"
+  },
+  {
+    "id": "steampunk_cat_ears",
+    "label": "Steampunk Cat Ears",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/steampunk_cat_ears.png"
+  },
+  {
+    "id": "stinkums",
+    "label": "Stinkums",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/stinkums.png"
+  },
+  {
+    "id": "straw_hat",
+    "label": "Straw Hat",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/straw_hat.png"
+  },
+  {
+    "id": "street_fighter_6_battle_field",
+    "label": "Street Fighter 6 Battle Field",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/street_fighter_6_battle_field.png"
+  },
+  {
+    "id": "string_lights",
+    "label": "String Lights",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/string_lights.png"
+  },
+  {
+    "id": "string_lights_aurora",
+    "label": "String Lights Aurora",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/string_lights_aurora.png"
+  },
+  {
+    "id": "string_lights_dusk",
+    "label": "String Lights Dusk",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/string_lights_dusk.png"
+  },
+  {
+    "id": "string_lights_ember",
+    "label": "String Lights Ember",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/string_lights_ember.png"
+  },
+  {
+    "id": "string_lights_mix",
+    "label": "String Lights Mix",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/string_lights_mix.png"
+  },
+  {
+    "id": "study_session",
+    "label": "Study Session",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/study_session.png"
+  },
+  {
+    "id": "tga_controller",
+    "label": "Tga Controller",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/tga_controller.png"
+  },
+  {
+    "id": "the_anomaly",
+    "label": "The Anomaly",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/the_anomaly.png"
+  },
+  {
+    "id": "the_atlas_gauntlets",
+    "label": "The Atlas Gauntlets",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/the_atlas_gauntlets.png"
+  },
+  {
+    "id": "the_hexcore",
+    "label": "The Hexcore",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/the_hexcore.png"
+  },
+  {
+    "id": "the_mark",
+    "label": "The Mark",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/the_mark.png"
+  },
+  {
+    "id": "the_monster_you_created",
+    "label": "The Monster You Created",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/the_monster_you_created.png"
+  },
+  {
+    "id": "timekeepers_clock",
+    "label": "Timekeepers Clock",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/timekeepers_clock.png"
+  },
+  {
+    "id": "toast",
+    "label": "Toast",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/toast.png"
+  },
+  {
+    "id": "torgal_puppy",
+    "label": "Torgal Puppy",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/torgal_puppy.png"
+  },
+  {
+    "id": "treasure_and_key",
+    "label": "Treasure And Key",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/treasure_and_key.png"
+  },
+  {
+    "id": "unicorn",
+    "label": "Unicorn",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/unicorn.png"
+  },
+  {
+    "id": "uwu_xp",
+    "label": "Uwu Xp",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/uwu_xp.png"
+  },
+  {
+    "id": "valorant_champions_2024",
+    "label": "Valorant Champions 2024",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/valorant_champions_2024.png"
+  },
+  {
+    "id": "victory_crown",
+    "label": "Victory Crown",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/victory_crown.png"
+  },
+  {
+    "id": "viper_poison_cloud",
+    "label": "Viper Poison Cloud",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/viper_poison_cloud.png"
+  },
+  {
+    "id": "wallach_spaceport",
+    "label": "Wallach Spaceport",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/wallach_spaceport.png"
+  },
+  {
+    "id": "warp_helmet",
+    "label": "Warp Helmet",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/warp_helmet.png"
+  },
+  {
+    "id": "wingmans_got_it",
+    "label": "Wingmans Got It",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/wingmans_got_it.png"
+  },
+  {
+    "id": "wingman_boba",
+    "label": "Wingman Boba",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/wingman_boba.png"
+  },
+  {
+    "id": "witch_hat_midnight",
+    "label": "Witch Hat Midnight",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/witch_hat_midnight.png"
+  },
+  {
+    "id": "witch_hat_plum",
+    "label": "Witch Hat Plum",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/witch_hat_plum.png"
+  },
+  {
+    "id": "wizards_staff",
+    "label": "Wizards Staff",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/wizards_staff.png"
+  },
+  {
+    "id": "wizard_hat_blue",
+    "label": "Wizard Hat Blue",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/wizard_hat_blue.png"
+  },
+  {
+    "id": "wizard_hat_purple",
+    "label": "Wizard Hat Purple",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/wizard_hat_purple.png"
+  },
+  {
+    "id": "wolf_morph",
+    "label": "Wolf Morph",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/wolf_morph.png"
+  },
+  {
+    "id": "yoru_dimensional_drift",
+    "label": "Yoru Dimensional Drift",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/yoru_dimensional_drift.png"
+  },
+  {
+    "id": "zombie_food",
+    "label": "Zombie Food",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/zombie_food.png"
+  },
+  {
+    "id": "zombie_food_purple",
+    "label": "Zombie Food Purple",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/zombie_food_purple.png"
+  },
+  {
+    "id": "static",
+    "label": "Static",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/static.png"
+  },
+  {
+    "id": "staytic",
+    "label": "Staytic",
+    "img": "https://cdn.jsdelivr.net/gh/sveryfine/troliaohon@main/public/decorations/staytic.png"
+  },
+  { id: 'cosmic', label: 'Vũ Trụ', img: '/frames/cosmic.png?v=2', anim: 'frame-anim-spin' },
+  { id: 'fire', label: 'Ngọn Lửa', img: '/frames/fire.png?v=2' },
+  { id: 'cat', label: 'Tai Mèo', img: '/frames/cat.png?v=2', anim: 'frame-anim-bob' },
+  { id: 'royal', label: 'Hoàng Gia', img: '/frames/royal.png?v=2', anim: 'frame-anim-breath' },
+  { id: 'angel', label: 'Thiên Thần', img: '/frames/angel.png?v=2', anim: 'frame-anim-bob' },
+  { id: 'ghost', label: 'Bóng Ma', img: '/frames/ghost.png?v=2', anim: 'frame-anim-bob' },
+  { id: 'lightning', label: 'Sấm Sét', img: '/frames/lightning.png?v=2', anim: 'frame-anim-shake' },
+  { id: 'sakura', label: 'Hoa Anh Đào', img: '/frames/sakura.png?v=2', anim: 'frame-anim-spin' },
+  { id: 'devil', label: 'Ác Quỷ', img: '/frames/devil.png?v=2', anim: 'frame-anim-breath' },
+  { id: 'ocean', label: 'Đại Dương', img: '/frames/ocean.png?v=2', anim: 'frame-anim-bob' }
 ];
 
-const renderAvatarFrame = (fid) => {
+const renderAvatarFrame = (fid, lazy = false) => {
   if (fid === 'none') return null;
   const frame = AVATAR_FRAMES.find(f => f.id === fid);
   if (!frame || !frame.img) return null;
-  return <img src={frame.img} alt={frame.label} style={{
+
+  const isCustomOrDecoration = frame.img && (frame.img.includes('/decorations/') || frame.img.startsWith('data:') || frame.img.startsWith('blob:'));
+  const baseStyle = {
     position: 'absolute', top: '-35%', left: '-35%', width: '170%', height: '170%',
     pointerEvents: 'none', zIndex: 3, objectFit: 'contain',
-    mixBlendMode: 'screen'
-  }} />;
+    mixBlendMode: isCustomOrDecoration ? 'normal' : 'screen'
+  };
+
+  if (fid === 'angel' || fid === 'devil') {
+    // Cut out wings and animate them separately using clip-path
+    return (
+      <div style={{ ...baseStyle, objectFit: 'visible' }}>
+        {/* Center (Halo/Horns) */}
+        <img src={frame.img} loading={lazy ? "lazy" : "eager"} style={{ ...baseStyle, top: 0, left: 0, width: '100%', height: '100%', clipPath: 'polygon(30% 0, 70% 0, 70% 100%, 30% 100%)', animation: 'imgBob 3s ease-in-out infinite' }} />
+        {/* Left Wing */}
+        <img src={frame.img} loading={lazy ? "lazy" : "eager"} style={{ ...baseStyle, top: 0, left: 0, width: '100%', height: '100%', clipPath: 'polygon(0 0, 30% 0, 30% 100%, 0 100%)', transformOrigin: '30% 50%', animation: 'flapLeft 1.2s ease-in-out infinite' }} />
+        {/* Right Wing */}
+        <img src={frame.img} loading={lazy ? "lazy" : "eager"} style={{ ...baseStyle, top: 0, left: 0, width: '100%', height: '100%', clipPath: 'polygon(70% 0, 100% 0, 100% 100%, 70% 100%)', transformOrigin: '70% 50%', animation: 'flapRight 1.2s ease-in-out infinite' }} />
+      </div>
+    );
+  }
+
+  if (fid === 'lightning') {
+    return (
+      <div style={{ ...baseStyle, objectFit: 'visible' }}>
+        <img src={frame.img} loading={lazy ? "lazy" : "eager"} style={{ ...baseStyle, top: 0, left: 0, width: '100%', height: '100%', animation: 'imgShake 0.15s infinite' }} />
+        <img src={frame.img} loading={lazy ? "lazy" : "eager"} style={{ ...baseStyle, top: 0, left: 0, width: '100%', height: '100%', animation: 'imgShake 0.1s infinite reverse', opacity: 0.5, filter: 'brightness(1.5)' }} />
+      </div>
+    );
+  }
+
+  // Default image rendering for other frames
+  return <img key={fid} src={frame.img} alt={frame.label} loading={lazy ? "lazy" : "eager"} className={frame.anim || ''} style={baseStyle} />;
 };
 
 const PERSONAS = {
@@ -1309,14 +2378,14 @@ function App() {
       {/* Header */}
       <header className="header">
         <div className="header-title">
-          <div 
-            className="avatar-container" 
-            onClick={() => setShowHistory(true)} 
+          <div
+            className="avatar-container"
+            onClick={() => setShowHistory(true)}
             style={{ cursor: 'pointer', position: 'relative' }}
             title="Lịch sử chat"
           >
             {renderAvatarFrame(aiAvatarFrame)}
-            
+
             {aiAvatar ? (
               <img src={aiAvatar} alt="AI Avatar" className="avatar-img" />
             ) : (
@@ -1699,44 +2768,7 @@ function App() {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label>Kho khung Avatar:</label>
-                  
-                  <div style={{ 
-                    display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', 
-                    gap: '12px', marginTop: '12px', marginBottom: '16px',
-                    background: 'rgba(0,0,0,0.2)', padding: '14px', borderRadius: '12px',
-                    border: '1px solid rgba(255,255,255,0.05)'
-                  }}>
-                    {AVATAR_FRAMES.map(frame => (
-                      <div 
-                        key={frame.id}
-                        onClick={() => setTempAvatarFrame(frame.id)}
-                        style={{
-                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          background: tempAvatarFrame === frame.id ? 'rgba(102,252,241,0.15)' : 'rgba(255,255,255,0.03)',
-                          padding: '10px 6px', borderRadius: '12px',
-                          border: tempAvatarFrame === frame.id ? '2px solid var(--primary-color)' : '2px solid transparent',
-                          WebkitTapHighlightColor: 'transparent', userSelect: 'none'
-                        }}
-                      >
-                        <div style={{ position: 'relative', width: 56, height: 56, overflow: 'visible' }}>
-                          {renderAvatarFrame(frame.id)}
-                          {tempAvatar ? (
-                            <img src={tempAvatar} alt="Preview Avatar" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-                          ) : (
-                            <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'linear-gradient(45deg, var(--primary-color), var(--accent-color))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#111', fontWeight: 'bold', fontSize: '1.1rem' }}>{frame.id === 'none' ? '⊘' : getInitials(tempName || aiName)}</div>
-                          )}
-                        </div>
-                        <span style={{ fontSize: '0.68rem', textAlign: 'center', color: tempAvatarFrame === frame.id ? 'var(--primary-color)' : 'var(--text-main)', fontWeight: tempAvatarFrame === frame.id ? 'bold' : 'normal' }}>
-                          {frame.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
 
                 <div className="form-group">
                   <label>Mã Model AI (Tuỳ chọn):</label>
@@ -1795,13 +2827,16 @@ function App() {
                   />
                 </div>
 
-                <div className="form-group">
+                  <div className="form-group">
                   <label>Ảnh đại diện :</label>
 
                   {/* Hiển thị trước ảnh đại diện trong cài đặt */}
                   {tempAvatar && (
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
-                      <img src={tempAvatar} alt="Preview" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary-color)' }} />
+                      <div style={{ position: 'relative', width: '80px', height: '80px', overflow: 'visible' }}>
+                        {renderAvatarFrame(tempAvatarFrame)}
+                        <img src={tempAvatar} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary-color)' }} />
+                      </div>
                     </div>
                   )}
 
@@ -1840,6 +2875,75 @@ function App() {
                         }}
                       />
                     </label>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Kho khung Avatar:</label>
+
+                  <div style={{
+                    display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: '12px', marginTop: '12px', marginBottom: '16px',
+                    background: 'rgba(0,0,0,0.2)', padding: '14px', borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.05)',
+                    maxHeight: '250px', overflowY: 'auto'
+                  }}>
+                    {/* Custom Frame Upload */}
+                    <div 
+                      onClick={() => document.getElementById('frameUploadInput').click()}
+                      style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        cursor: 'pointer', transition: 'all 0.2s',
+                        background: 'rgba(255,255,255,0.03)', padding: '10px 6px', borderRadius: '12px',
+                        border: '2px dashed rgba(255,255,255,0.2)', WebkitTapHighlightColor: 'transparent'
+                      }}
+                    >
+                      <div style={{ fontSize: '1.5rem', color: 'rgba(255,255,255,0.6)', width: 56, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</div>
+                      <span style={{ fontSize: '0.68rem', textAlign: 'center', color: 'var(--text-main)' }}>Tải Khung</span>
+                      <input 
+                        type="file" 
+                        id="frameUploadInput" 
+                        accept="image/gif, image/png, image/webp, image/apng" 
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            // Dùng URL.createObjectURL để giữ nguyên vẹn định dạng gốc (kể cả APNG) thay vì mã hóa base64
+                            const objectUrl = URL.createObjectURL(file);
+                            const customId = 'custom_' + Date.now();
+                            AVATAR_FRAMES.push({ id: customId, label: 'Khung Tự Tạo', img: objectUrl });
+                            setTempAvatarFrame(customId);
+                          }
+                        }}
+                      />
+                    </div>
+                    {AVATAR_FRAMES.map(frame => (
+                      <div
+                        key={frame.id}
+                        onClick={() => setTempAvatarFrame(frame.id)}
+                        style={{
+                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          background: tempAvatarFrame === frame.id ? 'rgba(102,252,241,0.15)' : 'rgba(255,255,255,0.03)',
+                          padding: '10px 6px', borderRadius: '12px',
+                          border: tempAvatarFrame === frame.id ? '2px solid var(--primary-color)' : '2px solid transparent',
+                          WebkitTapHighlightColor: 'transparent', userSelect: 'none'
+                        }}
+                      >
+                        <div style={{ position: 'relative', width: 56, height: 56, overflow: 'visible' }}>
+                          {renderAvatarFrame(frame.id, true)}
+                          {tempAvatar ? (
+                            <img src={tempAvatar} alt="Preview Avatar" loading="lazy" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                          ) : (
+                            <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'linear-gradient(45deg, var(--primary-color), var(--accent-color))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#111', fontWeight: 'bold', fontSize: '1.1rem' }}>{frame.id === 'none' ? '⊘' : getInitials(tempName || aiName)}</div>
+                          )}
+                        </div>
+                        <span style={{ fontSize: '0.68rem', textAlign: 'center', color: tempAvatarFrame === frame.id ? 'var(--primary-color)' : 'var(--text-main)', fontWeight: tempAvatarFrame === frame.id ? 'bold' : 'normal' }}>
+                          {frame.label}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
