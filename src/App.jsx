@@ -214,6 +214,31 @@ async function getEdgeTTSAudio(text, voice = 'vi-VN-HoaiMyNeural') {
   });
 }
 
+const AVATAR_FRAMES = [
+  { id: 'none', label: 'Cơ bản', img: null },
+  { id: 'cosmic', label: 'Vũ Trụ', img: '/frames/cosmic.png' },
+  { id: 'fire', label: 'Ngọn Lửa', img: '/frames/fire.png' },
+  { id: 'cat', label: 'Tai Mèo', img: '/frames/cat.png' },
+  { id: 'royal', label: 'Hoàng Gia', img: '/frames/royal.png' },
+  { id: 'angel', label: 'Thiên Thần', img: '/frames/angel.png' },
+  { id: 'ghost', label: 'Bóng Ma', img: '/frames/ghost.png' },
+  { id: 'lightning', label: 'Sấm Sét', img: '/frames/lightning.png' },
+  { id: 'sakura', label: 'Hoa Anh Đào', img: '/frames/sakura.png' },
+  { id: 'devil', label: 'Ác Quỷ', img: '/frames/devil.png' },
+  { id: 'ocean', label: 'Đại Dương', img: '/frames/ocean.png' },
+];
+
+const renderAvatarFrame = (fid) => {
+  if (fid === 'none') return null;
+  const frame = AVATAR_FRAMES.find(f => f.id === fid);
+  if (!frame || !frame.img) return null;
+  return <img src={frame.img} alt={frame.label} style={{
+    position: 'absolute', top: '-35%', left: '-35%', width: '170%', height: '170%',
+    pointerEvents: 'none', zIndex: 3, objectFit: 'contain',
+    mixBlendMode: 'screen'
+  }} />;
+};
+
 const PERSONAS = {
   mo_hon: {
     label: "Anh Long mất rậy",
@@ -393,6 +418,8 @@ function App() {
   const [tempBgImage, setTempBgImage] = useState(bgImage);
   const [aiAvatar, setAiAvatar] = useState(localStorage.getItem('ai_avatar') || '');
   const [tempAvatar, setTempAvatar] = useState(aiAvatar);
+  const [aiAvatarFrame, setAiAvatarFrame] = useState(localStorage.getItem('ai_avatar_frame') || 'none');
+  const [tempAvatarFrame, setTempAvatarFrame] = useState(aiAvatarFrame);
   const [attachment, setAttachment] = useState(null); // Lưu trữ ảnh đính kèm
 
   // Trạng thái cho menu tin nhắn
@@ -1197,6 +1224,7 @@ function App() {
     localStorage.setItem('user_gender', tempUserGender);
     localStorage.setItem('ai_verbosity', tempAiVerbosity);
     localStorage.setItem('ai_model', tempModel.trim());
+    localStorage.setItem('ai_avatar_frame', tempAvatarFrame);
 
     setAiName(tempName.trim());
     setAiPersona(tempPersona);
@@ -1205,6 +1233,7 @@ function App() {
     setAiVerbosity(tempAiVerbosity);
     setBgImage(tempBgImage.trim());
     setAiAvatar(tempAvatar.trim());
+    setAiAvatarFrame(tempAvatarFrame);
     setAiModel(tempModel.trim());
     setShowSettings(false);
 
@@ -1283,9 +1312,11 @@ function App() {
           <div 
             className="avatar-container" 
             onClick={() => setShowHistory(true)} 
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', position: 'relative' }}
             title="Lịch sử chat"
           >
+            {renderAvatarFrame(aiAvatarFrame)}
+            
             {aiAvatar ? (
               <img src={aiAvatar} alt="AI Avatar" className="avatar-img" />
             ) : (
@@ -1342,6 +1373,7 @@ function App() {
             setTempAiVerbosity(aiVerbosity);
             setTempBgImage(bgImage);
             setTempAvatar(aiAvatar);
+            setTempAvatarFrame(aiAvatarFrame);
             setTempModel(aiModel);
             setImageToCrop(null);
             setShowSettings(true);
@@ -1665,6 +1697,45 @@ function App() {
                     value={tempName}
                     onChange={(e) => setTempName(e.target.value)}
                   />
+                </div>
+
+                <div className="form-group">
+                  <label>Kho khung Avatar:</label>
+                  
+                  <div style={{ 
+                    display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', 
+                    gap: '12px', marginTop: '12px', marginBottom: '16px',
+                    background: 'rgba(0,0,0,0.2)', padding: '14px', borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.05)'
+                  }}>
+                    {AVATAR_FRAMES.map(frame => (
+                      <div 
+                        key={frame.id}
+                        onClick={() => setTempAvatarFrame(frame.id)}
+                        style={{
+                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          background: tempAvatarFrame === frame.id ? 'rgba(102,252,241,0.15)' : 'rgba(255,255,255,0.03)',
+                          padding: '10px 6px', borderRadius: '12px',
+                          border: tempAvatarFrame === frame.id ? '2px solid var(--primary-color)' : '2px solid transparent',
+                          WebkitTapHighlightColor: 'transparent', userSelect: 'none'
+                        }}
+                      >
+                        <div style={{ position: 'relative', width: 56, height: 56, overflow: 'visible' }}>
+                          {renderAvatarFrame(frame.id)}
+                          {tempAvatar ? (
+                            <img src={tempAvatar} alt="Preview Avatar" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                          ) : (
+                            <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'linear-gradient(45deg, var(--primary-color), var(--accent-color))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#111', fontWeight: 'bold', fontSize: '1.1rem' }}>{frame.id === 'none' ? '⊘' : getInitials(tempName || aiName)}</div>
+                          )}
+                        </div>
+                        <span style={{ fontSize: '0.68rem', textAlign: 'center', color: tempAvatarFrame === frame.id ? 'var(--primary-color)' : 'var(--text-main)', fontWeight: tempAvatarFrame === frame.id ? 'bold' : 'normal' }}>
+                          {frame.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="form-group">
