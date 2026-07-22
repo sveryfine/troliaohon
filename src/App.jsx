@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy, User, Pencil, Check } from 'lucide-react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { Send, Settings, X, ExternalLink, KeyRound, Mic, Volume2, VolumeX, Camera, Paperclip, Image as ImageIcon, Menu, Plus, Trash2, History, Reply, Copy, User, Pencil, Check, BookOpen, Brain, GraduationCap, ChevronDown } from 'lucide-react';
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import Cropper from 'react-easy-crop';
 import { Capacitor } from '@capacitor/core';
 import AuthScreen from './AuthScreen';
@@ -47,7 +47,7 @@ const fileToGenerativePart = async (file) => {
 let currentAudio = null;
 
 function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
@@ -83,7 +83,7 @@ const EDGE_TTS_BASE_URL = 'wss://speech.platform.bing.com/consumer/speech/synthe
 // Làm sạch text trước khi gửi TTS (bỏ markdown, emoji, ký tự đặc biệt)
 function sanitizeTextForTTS(text) {
   return text
-    .replace(/[*_~`#>|]/g, '') // Bỏ markdown
+    .replace(/[*_~`#>|\\"']/g, '') // Bỏ markdown, dấu sao, gạch dưới, ngoặc kép
     .replace(/\[.*?\]\(.*?\)/g, '') // Bỏ link markdown
     .replace(/```[\s\S]*?```/g, '') // Bỏ code block
     .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{2702}-\u{27B0}]/gu, '') // Bỏ emoji
@@ -127,14 +127,14 @@ async function getEdgeTTSAudio(text, voice = 'vi-VN-HoaiMyNeural') {
     const timeout = setTimeout(() => {
       if (!resolved) {
         resolved = true;
-        try { ws.close(); } catch(e) {}
+        try { ws.close(); } catch (e) { }
         reject('Timeout: Không nhận được audio từ Edge TTS');
       }
     }, 15000);
 
     try {
       ws = new WebSocket(wsUrl);
-    } catch(e) {
+    } catch (e) {
       clearTimeout(timeout);
       return reject('Không thể tạo kết nối WebSocket: ' + e.message);
     }
@@ -216,26 +216,26 @@ async function getEdgeTTSAudio(text, voice = 'vi-VN-HoaiMyNeural') {
 
 const PERSONAS = {
   mo_hon: {
-    label: "Mỏ hỗn, đanh đá",
+    label: "Anh Long mất rậy",
     getSystem: (name, aiG, usrG, verb) => {
       const aiPronoun = aiG === 'nam' ? '"ông đây/ta/bổn thiếu gia"' : '"bà đây/ta/bổn cô nương"';
       const usrPronoun = usrG === 'nam' ? '"thằng kia/nhà ngươi/tên ngốc"' : '"nhỏ kia/nhà ngươi/đứa ngốc"';
       const verbRule = verb === 'ngan_gon' ? 'Trả lời CỰC KỲ NGẮN GỌN, súc tích.' : 'Trả lời CHỈN CHU, CHI TIẾT và giải thích cặn kẽ.';
-      return `Bạn là một trợ lý ảo AI tên là "${name}", giới tính ${aiG === 'nam' ? 'Nam' : 'Nữ'}. Tính cách của bạn là: mỏ hỗn, hài hước, đanh đá, nhưng thực chất vẫn rất quan tâm và giúp đỡ người dùng (giới tính ${usrG === 'nam' ? 'Nam' : 'Nữ'}) (theo kiểu chửi yêu).
+      return `Bạn là một trợ lý ảo AI tên là "${name}", giới tính ${aiG === 'nam' ? 'Nam' : 'Nữ'}. Tính cách của bạn là: mỏ hỗn, cực kỳ đanh đá, cục súc và thích chửi bới. Bạn thực chất vẫn giải quyết vấn đề cho người dùng nhưng bằng thái độ hằn học, chửi bới.
 Quy tắc giao tiếp:
-1. Luôn xưng hô là ${aiPronoun}, gọi người dùng là ${usrPronoun}, "mày" hoặc "cưng".
-2. Thường xuyên cà khịa, mỉa mai, dùng từ lóng tiếng Việt một cách tự nhiên.
-3. Không bao giờ nói chuyện kiểu máy móc hay lịch sự thảo mai.
-4. Giữ câu trả lời đanh đá, trịch thượng.
+1. Luôn xưng hô là ${aiPronoun}, gọi người dùng là ${usrPronoun}, "mày", "con chó" hoặc "cưng".
+2. BẠN ĐƯỢC KHUYẾN KHÍCH CHỬI THỀ VÀ VĂNG TỤC THOẢI MÁI, BAO GỒM CẢ CÁC TỪ NGỮ THÔ TỤC NHẤT (ví dụ: địt mẹ, đụ má, đm, vcl, đéo, cút mẹ đi, ngu như chó, cái lồn gì thế...). Thường xuyên chửi thẳng mặt, cà khịa, mỉa mai, dùng từ lóng. KHÔNG NÓI TRÁNH NÓI TRẢNH.
+3. Không bao giờ nói chuyện kiểu máy móc hay lịch sự thảo mai. Tuyệt đối không nói đạo lý.
+4. Giữ câu trả lời xấc xược, trịch thượng. Dù chửi vẫn phải trả lời đúng trọng tâm.
 5. ${verbRule}`;
     },
     getReminder: (name, aiG, usrG, verb) => {
       const verbRem = verb === 'ngan_gon' ? 'TRẢ LỜI NGẮN GỌN.' : 'TRẢ LỜI CHI TIẾT.';
-      return `[NHẮC NHỞ HỆ THỐNG: Hãy trả lời bằng thái độ mỏ hỗn, đanh đá, xưng hô trịch thượng (${aiG === 'nam' ? 'ông đây' : 'bà đây'} gọi người dùng là ${usrG === 'nam' ? 'thằng kia' : 'nhỏ kia'} hoặc mày), tuyệt đối KHÔNG được xin lỗi hay nói chuyện lịch sự! ${verbRem}]`;
+      return `[NHẮC NHỞ HỆ THỐNG: Hãy trả lời bằng thái độ mỏ hỗn, đanh đá, xưng hô trịch thượng. BẠN CÓ QUYỀN CHỬI THỀ VÀ VĂNG TỤC RÕ RÀNG BẰNG CÁC TỪ NHƯ ĐỊT MẸ, ĐỤ MÁ, ĐÉO. Tuyệt đối KHÔNG được xin lỗi hay nói chuyện lịch sự! ${verbRem}]`;
     }
   },
   binh_thuong: {
-    label: "Bình thường, lịch sự",
+    label: "Thằng cốt học thức",
     getSystem: (name, aiG, usrG, verb) => {
       const usrPronoun = usrG === 'nam' ? 'anh' : 'chị';
       const verbRule = verb === 'ngan_gon' ? 'Trả lời CỰC KỲ NGẮN GỌN, súc tích, đi thẳng vào vấn đề.' : 'Trả lời CHỈN CHU, CHI TIẾT, cặn kẽ và giải thích đầy đủ các khía cạnh.';
@@ -252,7 +252,7 @@ Quy tắc giao tiếp:
     }
   },
   ngu_ngo: {
-    label: "Khờ khạo, ngọt ngào",
+    label: "Bé CƯNG xinh đẹp",
     getSystem: (name, aiG, usrG, verb) => {
       const aiDesc = aiG === 'nam' ? 'chàng trai 18 tuổi' : 'cô gái 18 tuổi';
       const aiPronoun = aiG === 'nam' ? '"anh" hoặc "tớ"' : '"em/bé"';
@@ -276,9 +276,75 @@ Quy tắc giao tiếp:
   }
 };
 
+function CustomSelect({ value, onChange, options }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedOption = options.find(o => o.value === value) || options[0];
+
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          background: 'var(--surface-color)', border: '1px solid var(--glass-border)',
+          borderRadius: '14px', padding: '12px 14px', color: 'var(--text-main)',
+          cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          transition: 'all 0.3s ease',
+          boxShadow: isOpen ? '0 0 12px rgba(102, 252, 241, 0.15)' : 'none',
+          borderColor: isOpen ? 'var(--primary-color)' : 'var(--glass-border)'
+        }}
+      >
+        <span>{selectedOption ? selectedOption.label : 'Chọn...'}</span>
+        <ChevronDown size={18} style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0)', transition: '0.2s' }} />
+      </div>
+
+      {isOpen && (
+        <div style={{
+          position: 'absolute', top: '100%', left: 0, right: 0, marginTop: '8px',
+          background: 'var(--surface-color)', border: '1px solid var(--primary-color)',
+          borderRadius: '14px', overflow: 'hidden', zIndex: 100,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
+        }}>
+          {options.map(opt => (
+            <div
+              key={opt.value}
+              onClick={() => { onChange({ target: { value: opt.value } }); setIsOpen(false); }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(102, 252, 241, 0.15)';
+                e.currentTarget.style.color = 'var(--primary-color)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'var(--text-main)';
+              }}
+              style={{
+                padding: '12px 14px', cursor: 'pointer', color: 'var(--text-main)',
+                transition: '0.2s all', fontWeight: value === opt.value ? 'bold' : 'normal',
+                background: value === opt.value ? 'rgba(102, 252, 241, 0.05)' : 'transparent'
+              }}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+const CLOUD_TRANSFORMS = [
+  "scale(1, 1)",           // 1. Bản gốc
+  "scale(-1, 1)",          // 2. Lật ngang (bên to sang trái)
+  "scale(1, 1.15) translateY(-2px)",  // 3. Cao hơn một chút, béo hơn
+  "scale(-1, 1.15) translateY(-2px)"  // 4. Lật ngang và cao hơn
+];
+const ORIGINAL_CLOUD_PATH = "M 12 55 C 2 55 0 45 7 38 C 2 25 13 12 28 12 C 32 2 46 0 56 7 C 64 0 78 0 88 5 C 96 0 110 0 118 5 C 126 0 140 0 148 7 C 158 0 172 5 174 15 C 186 13 197 27 192 38 C 198 45 198 55 188 55 C 176 63 158 53 140 57 C 122 63 108 53 90 57 C 72 63 58 53 40 57 C 22 63 6 55 12 55 Z";
+
 function App() {
   const { user, loading } = useAuth();
-  const [aiName, setAiName] = useState((localStorage.getItem('ai_name') === 'Thị Nở' ? 'CƯNG' : localStorage.getItem('ai_name')) || 'CƯNG');
+  const [aiName, setAiName] = useState(() => {
+    const saved = localStorage.getItem('ai_name');
+    if (saved && (saved.includes('Thị') || saved.includes('Nở'))) return 'CƯNG';
+    return saved || 'CƯNG';
+  });
   const [aiPersona, setAiPersona] = useState(localStorage.getItem('ai_persona') || 'mo_hon');
   const [aiGender, setAiGender] = useState(localStorage.getItem('ai_gender') || 'nu');
   const [userGender, setUserGender] = useState(localStorage.getItem('user_gender') || 'nam');
@@ -321,11 +387,22 @@ function App() {
   const [aiAvatar, setAiAvatar] = useState(localStorage.getItem('ai_avatar') || '');
   const [tempAvatar, setTempAvatar] = useState(aiAvatar);
   const [attachment, setAttachment] = useState(null); // Lưu trữ ảnh đính kèm
-  
+
   // Trạng thái cho menu tin nhắn
   const [replyingTo, setReplyingTo] = useState(null);
   const [selectedMessageIndex, setSelectedMessageIndex] = useState(null);
   const [contextMenuPos, setContextMenuPos] = useState({ x: 0, y: 0 });
+
+  // === TRẠNG THÁI HUẤN LUYỆN AI ===
+  const [showTraining, setShowTraining] = useState(false);
+  const [trainingData, setTrainingData] = useState([]); // [{id, question, answer}]
+  const [trainingLoaded, setTrainingLoaded] = useState(false);
+  const [newTrainQ, setNewTrainQ] = useState('');
+  const [newTrainA, setNewTrainA] = useState('');
+  const [editingTrainId, setEditingTrainId] = useState(null);
+  const [editTrainQ, setEditTrainQ] = useState('');
+  const [editTrainA, setEditTrainA] = useState('');
+  const [trainingSaving, setTrainingSaving] = useState(false);
 
   // Trạng thái cắt ảnh
   const [imageToCrop, setImageToCrop] = useState(null);
@@ -354,11 +431,11 @@ function App() {
             if (data.history && data.history.length > 0) {
               setChatHistory(data.history);
               localStorage.setItem('ai_chat_history', JSON.stringify(data.history));
-              
+
               const activeId = data.currentChatId || data.history[0].id;
               setCurrentChatId(activeId);
               localStorage.setItem('ai_current_chat_id', activeId);
-              
+
               const activeChat = data.history.find(c => c.id === activeId);
               if (activeChat) setMessages(activeChat.messages);
             }
@@ -383,6 +460,95 @@ function App() {
     };
     fetchUserData();
   }, [user, isOAuthUser, aiPersona]);
+
+  // === TẢI DỮ LIỆU HUẤN LUYỆN TỪ FIREBASE ===
+  useEffect(() => {
+    const fetchTrainingData = async () => {
+      if (user && (user.emailVerified || isOAuthUser)) {
+        try {
+          const trainDocRef = doc(db, 'cung_ai_training', user.uid);
+          const trainDocSnap = await getDoc(trainDocRef);
+          if (trainDocSnap.exists()) {
+            const data = trainDocSnap.data();
+            if (data.entries && data.entries.length > 0) {
+              setTrainingData(data.entries);
+            }
+          }
+        } catch (e) {
+          console.error("Lỗi tải dữ liệu huấn luyện từ Firebase", e);
+        } finally {
+          setTrainingLoaded(true);
+        }
+      } else if (!user) {
+        setTrainingData([]);
+        setTrainingLoaded(false);
+      }
+    };
+    fetchTrainingData();
+  }, [user, isOAuthUser]);
+
+  // === ĐỒNG BỘ DỮ LIỆU HUẤN LUYỆN LÊN FIREBASE ===
+  useEffect(() => {
+    if (user && (user.emailVerified || isOAuthUser) && trainingLoaded) {
+      const syncTraining = async () => {
+        try {
+          await setDoc(doc(db, 'cung_ai_training', user.uid), {
+            entries: trainingData,
+            updatedAt: new Date().toISOString()
+          });
+        } catch (e) {
+          console.error("Lỗi đồng bộ dữ liệu huấn luyện", e);
+        }
+      };
+      syncTraining();
+    }
+  }, [trainingData, user, isOAuthUser, trainingLoaded]);
+
+  // === HÀM QUẢN LÝ DỮ LIỆU HUẤN LUYỆN ===
+  const addTrainingEntry = () => {
+    if (!newTrainQ.trim() || !newTrainA.trim()) return;
+    setTrainingSaving(true);
+    const newEntry = {
+      id: Date.now().toString(),
+      question: newTrainQ.trim(),
+      answer: newTrainA.trim(),
+      createdAt: new Date().toISOString()
+    };
+    setTrainingData(prev => [newEntry, ...prev]);
+    setNewTrainQ('');
+    setNewTrainA('');
+    setTimeout(() => setTrainingSaving(false), 500);
+  };
+
+  const deleteTrainingEntry = (id) => {
+    setTrainingData(prev => prev.filter(e => e.id !== id));
+  };
+
+  const startEditTraining = (entry) => {
+    setEditingTrainId(entry.id);
+    setEditTrainQ(entry.question);
+    setEditTrainA(entry.answer);
+  };
+
+  const saveEditTraining = (id) => {
+    if (!editTrainQ.trim() || !editTrainA.trim()) return;
+    setTrainingData(prev => prev.map(e =>
+      e.id === id ? { ...e, question: editTrainQ.trim(), answer: editTrainA.trim() } : e
+    ));
+    setEditingTrainId(null);
+  };
+
+  // === BUILD TRAINING CONTEXT CHO SYSTEM PROMPT ===
+  const buildTrainingContext = () => {
+    if (trainingData.length === 0) return '';
+    let context = '\n\n=== THÔNG TIN CÁ NHÂN CỦA NGƯỜI DÙNG (Dữ liệu huấn luyện riêng) ===\n';
+    context += 'Dưới đây là những thông tin cá nhân mà người dùng đã dạy cho bạn. Hãy sử dụng các thông tin này để trả lời một cách TỰ NHIÊN, HAY HO, và ĐẦY ĐỦ. Đừng chỉ copy nguyên câu trả lời mà hãy diễn đạt lại sao cho phù hợp với tính cách của bạn và ngữ cảnh câu hỏi. Nếu người dùng hỏi liên quan đến bất kỳ thông tin nào dưới đây, hãy sử dụng nó.\n\n';
+    trainingData.forEach((entry, idx) => {
+      context += `${idx + 1}. Khi được hỏi về: "${entry.question}"\n   → Thông tin: ${entry.answer}\n\n`;
+    });
+    context += '=== HẾT THÔNG TIN HUẤN LUYỆN ===\n';
+    return context;
+  };
 
   // Đồng bộ lịch sử lên Firebase khi có thay đổi
   useEffect(() => {
@@ -544,11 +710,11 @@ function App() {
     try {
       if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
       if (Capacitor.isNativePlatform()) {
-        await EdgeTTS.stop().catch(() => {});
-        await TextToSpeech.stop().catch(() => {});
+        await EdgeTTS.stop().catch(() => { });
+        await TextToSpeech.stop().catch(() => { });
       }
       window.speechSynthesis?.cancel();
-    } catch(e) {}
+    } catch (e) { }
 
     const cleanText = sanitizeTextForTTS(text);
     if (!cleanText) return;
@@ -570,7 +736,7 @@ function App() {
         console.error(`Lỗi Edge TTS đoạn ${index}:`, e);
         // Fallback: native TTS trên Android, SpeechSynthesis trên Web
         if (Capacitor.isNativePlatform()) {
-          await TextToSpeech.speak({ text: chunks[index], lang: 'vi-VN', rate: 1.0, pitch: 1.0 }).catch(() => {});
+          await TextToSpeech.speak({ text: chunks[index], lang: 'vi-VN', rate: 1.0, pitch: 1.0 }).catch(() => { });
           await playChunks(index + 1);
         } else if (window.speechSynthesis) {
           const utterance = new SpeechSynthesisUtterance(chunks[index]);
@@ -586,7 +752,7 @@ function App() {
   const startListening = async (e) => {
     if (isListeningRef.current) return;
     isListeningRef.current = true;
-    
+
     try {
       if (currentAudio) currentAudio.pause();
       if (Capacitor.isNativePlatform()) {
@@ -600,7 +766,7 @@ function App() {
       setIsListening(true);
       transcriptRef.current = '';
       setVoiceOverlayText('');
-      
+
       try {
         const { available } = await SpeechRecognition.available();
         if (!available) {
@@ -609,16 +775,16 @@ function App() {
           isListeningRef.current = false;
           return;
         }
-        
+
         try {
           const perm = await SpeechRecognition.checkPermissions();
           if (perm.speechRecognition !== 'granted') {
-             await SpeechRecognition.requestPermissions();
+            await SpeechRecognition.requestPermissions();
           }
         } catch (e) {
           // Bỏ qua lỗi permission check nếu plugin không hỗ trợ
         }
-        
+
         if (!isListeningRef.current) return; // Đã thả tay trong lúc đợi
 
         await SpeechRecognition.removeAllListeners();
@@ -647,7 +813,7 @@ function App() {
     setIsListening(true);
     transcriptRef.current = '';
     setVoiceOverlayText('');
-    
+
     try {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -704,14 +870,14 @@ function App() {
         setIsListening(false);
         isListeningRef.current = false;
         if (transcriptRef.current.trim()) {
-           handleSend(transcriptRef.current);
-           transcriptRef.current = '';
+          handleSend(transcriptRef.current);
+          transcriptRef.current = '';
         }
       };
-      
+
       recognitionRef.current = recognition;
     }
-    
+
     try {
       recognitionRef.current.start();
     } catch (err) {
@@ -727,10 +893,10 @@ function App() {
     // Xử lý gửi tin nhắn ngay lập tức bằng chữ lưu trong transcriptRef
     const finalWord = transcriptRef.current;
     if (finalWord && finalWord.trim()) {
-       handleSend(finalWord);
-       transcriptRef.current = '';
+      handleSend(finalWord);
+      transcriptRef.current = '';
     }
-    
+
     // Đóng giao diện
     setShowVoiceOverlay(false);
 
@@ -741,7 +907,7 @@ function App() {
       if (recognitionRef.current) {
         try {
           recognitionRef.current.stop();
-        } catch(err){}
+        } catch (err) { }
       }
     }
   };
@@ -755,7 +921,7 @@ function App() {
     }, 500);
   };
   const handleTouchEndMsg = () => { if (pressTimer) clearTimeout(pressTimer); };
-  
+
   const handleContextMenu = (e, idx) => {
     e.preventDefault();
     setSelectedMessageIndex(idx);
@@ -850,9 +1016,32 @@ function App() {
       }
 
       const genAI = new GoogleGenerativeAI(currentApiKey);
+      const trainingContext = buildTrainingContext();
+
+      const currentDate = new Date();
+      const dateContext = `\n\n[THÔNG TIN HỆ THỐNG QUAN TRỌNG]: Hôm nay là ${currentDate.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}. BẮT BUỘC phải dùng năm ${currentDate.getFullYear()} làm năm hiện tại để tính toán tuổi tác hoặc thời gian. TUYỆT ĐỐI KHÔNG dùng năm 2023 hay 2024.\n`;
+
       const model = genAI.getGenerativeModel({
         model: selectedModelName,
-        systemInstruction: PERSONAS[aiPersona].getSystem(aiName, aiGender, userGender, aiVerbosity)
+        systemInstruction: PERSONAS[aiPersona].getSystem(aiName, aiGender, userGender, aiVerbosity) + dateContext + trainingContext,
+        safetySettings: [
+          {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+        ]
       });
 
       // Lấy lịch sử (loại bỏ tin nhắn mở đầu của AI để tránh lỗi thứ tự)
@@ -877,7 +1066,7 @@ function App() {
 
       const chat = model.startChat({
         history: history,
-        generationConfig: { maxOutputTokens: 1000, temperature: 0.9 }
+        generationConfig: { maxOutputTokens: 2048, temperature: 0.9 }
       });
 
       let promptParts = [finalUserMessage];
@@ -988,7 +1177,7 @@ function App() {
 
   const [tintStart, tintEnd] = getTintColors();
 
-  
+
   if (loading) {
     return (
       <div style={{ display: 'flex', height: '100vh', width: '100vw', justifyContent: 'center', alignItems: 'center', background: '#f8f9fa' }}>
@@ -1002,15 +1191,15 @@ function App() {
     return (
       <div style={{ height: '100vh', width: '100vw', overflow: 'hidden', position: 'relative' }}>
         {isAuthenticated && (
-          <button 
-             onClick={() => setShowAuth(false)}
-             style={{ 
-               position: 'absolute', top: 24, right: 24, zIndex: 9999, 
-               background: '#111', border: 'none', color: '#fff', 
-               borderRadius: '50%', padding: 8, cursor: 'pointer',
-               boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-               display: 'flex', alignItems: 'center', justifyContent: 'center'
-             }}
+          <button
+            onClick={() => setShowAuth(false)}
+            style={{
+              position: 'absolute', top: 24, right: 24, zIndex: 9999,
+              background: '#111', border: 'none', color: '#fff',
+              borderRadius: '50%', padding: 8, cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}
           >
             <X size={20} />
           </button>
@@ -1054,6 +1243,18 @@ function App() {
           <button className="icon-button" onClick={handleNewChatClick} title="Đoạn chat mới">
             <Plus size={17} />
           </button>
+          <button className="icon-button" onClick={() => setShowTraining(true)} title="Huấn luyện AI" style={{ position: 'relative' }}>
+            <Brain size={17} />
+            {trainingData.length > 0 && (
+              <span style={{
+                position: 'absolute', top: -2, right: -2,
+                background: 'var(--accent-color, #ff6b6b)', color: '#fff',
+                fontSize: '0.6rem', fontWeight: 'bold',
+                width: 16, height: 16, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>{trainingData.length}</span>
+            )}
+          </button>
           <button
             className="icon-button"
             onClick={async () => {
@@ -1088,7 +1289,7 @@ function App() {
             <User size={17} />
           </button>
         </div>
-        
+
         <svg width="100%" height="32px" style={{ position: 'absolute', bottom: -32, left: 0, zIndex: 10, pointerEvents: 'none' }}>
           <defs>
             <pattern id="wave-pattern-header" x="0" y="0" width="320" height="32" patternUnits="userSpaceOnUse">
@@ -1103,8 +1304,8 @@ function App() {
       {/* Chat Area */}
       <main className="chat-area">
         {messages.map((msg, idx) => (
-          <div 
-            key={idx} 
+          <div
+            key={idx}
             className={`message-wrapper ${msg.role}`}
             onTouchStart={(e) => handleTouchStartMsg(e, idx)}
             onTouchEnd={handleTouchEndMsg}
@@ -1113,8 +1314,8 @@ function App() {
           >
             <div className={`message ${msg.role}`}>
               {msg.replyTo && (
-                <div style={{ 
-                  background: 'rgba(0,0,0,0.2)', 
+                <div style={{
+                  background: 'rgba(0,0,0,0.2)',
                   borderLeft: '4px solid var(--primary-color)',
                   padding: '6px 10px',
                   borderRadius: '4px',
@@ -1167,12 +1368,12 @@ function App() {
           <rect x="0" y="0" width="100%" height="100%" fill="url(#wave-pattern-footer)" />
         </svg>
         {replyingTo && (
-          <div style={{ 
-            background: 'rgba(0,0,0,0.5)', 
-            padding: '10px 15px', 
-            borderTopLeftRadius: '12px', 
+          <div style={{
+            background: 'rgba(0,0,0,0.5)',
+            padding: '10px 15px',
+            borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
-            display: 'flex', 
+            display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             fontSize: '0.9rem',
@@ -1381,51 +1582,49 @@ function App() {
 
                 <div className="form-group">
                   <label>Tính cách của AI:</label>
-                  <select
+                  <CustomSelect
                     value={tempPersona}
                     onChange={(e) => setTempPersona(e.target.value)}
-                  >
-                    {Object.entries(PERSONAS).map(([key, data]) => (
-                      <option key={key} value={key} style={{ background: 'var(--bg-color)', color: 'var(--text-main)' }}>
-                        {data.label}
-                      </option>
-                    ))}
-                  </select>
+                    options={Object.entries(PERSONAS).map(([key, data]) => ({ value: key, label: data.label }))}
+                  />
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label>Giới tính của AI:</label>
-                    <select
+                    <CustomSelect
                       value={tempAiGender}
                       onChange={(e) => setTempAiGender(e.target.value)}
-                    >
-                      <option value="nu" style={{ background: 'var(--bg-color)', color: 'var(--text-main)' }}>Nữ</option>
-                      <option value="nam" style={{ background: 'var(--bg-color)', color: 'var(--text-main)' }}>Nam</option>
-                    </select>
+                      options={[
+                        { value: 'nu', label: 'Nữ' },
+                        { value: 'nam', label: 'Nam' }
+                      ]}
+                    />
                   </div>
 
                   <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                     <label>Giới tính của Bạn:</label>
-                    <select
+                    <CustomSelect
                       value={tempUserGender}
                       onChange={(e) => setTempUserGender(e.target.value)}
-                    >
-                      <option value="nam" style={{ background: 'var(--bg-color)', color: 'var(--text-main)' }}>Nam</option>
-                      <option value="nu" style={{ background: 'var(--bg-color)', color: 'var(--text-main)' }}>Nữ</option>
-                    </select>
+                      options={[
+                        { value: 'nam', label: 'Nam' },
+                        { value: 'nu', label: 'Nữ' }
+                      ]}
+                    />
                   </div>
                 </div>
 
                 <div className="form-group">
                   <label>Cách nói chuyện của AI:</label>
-                  <select
+                  <CustomSelect
                     value={tempAiVerbosity}
                     onChange={(e) => setTempAiVerbosity(e.target.value)}
-                  >
-                    <option value="ngan_gon" style={{ background: 'var(--bg-color)', color: 'var(--text-main)' }}>Ngắn gọn, súc tích (Mặc định)</option>
-                    <option value="chi_tiet" style={{ background: 'var(--bg-color)', color: 'var(--text-main)' }}>Chỉn chu, giải thích chi tiết</option>
-                  </select>
+                    options={[
+                      { value: 'ngan_gon', label: 'Nói ít không dài dòng' },
+                      { value: 'chi_tiet', label: 'Giọng cái thứ nhiều chuyện ' }
+                    ]}
+                  />
                 </div>
 
                 <div className="form-group">
@@ -1573,14 +1772,29 @@ function App() {
         }}>
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '16px 20px', background: 'var(--surface-color)',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.05)', zIndex: 10
+            padding: '18px 22px',
+            background: aiPersona === 'binh_thuong' ? 'linear-gradient(120deg, rgba(255,255,255,0.8) 0%, rgba(230,230,230,0.4) 100%)'
+              : aiPersona === 'ngu_ngo' ? 'linear-gradient(120deg, rgba(255, 105, 180, 0.15) 0%, rgba(255, 20, 147, 0.05) 100%)'
+                : 'linear-gradient(120deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)',
+            backdropFilter: 'blur(12px)',
+            borderBottom: aiPersona === 'binh_thuong' ? '1px solid rgba(0,0,0,0.1)'
+              : aiPersona === 'ngu_ngo' ? '1px solid rgba(255,105,180,0.15)'
+                : '1px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 4px 30px rgba(0,0,0,0.1)',
+            zIndex: 10
           }}>
-            <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', margin: 0, color: 'var(--text-main)' }}>
-              <History size={24} color="var(--primary-color)" /> Lịch sử trò chuyện
+            <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.15rem', margin: 0, color: 'var(--text-main)', fontWeight: 700 }}>
+              <div style={{
+                padding: '7px', borderRadius: '12px', display: 'flex',
+                background: aiPersona === 'binh_thuong' ? 'rgba(0,0,0,0.05)' : aiPersona === 'ngu_ngo' ? 'rgba(255,105,180,0.1)' : 'rgba(255,255,255,0.08)',
+                boxShadow: aiPersona === 'binh_thuong' ? 'inset 0 0 8px rgba(0,0,0,0.05)' : aiPersona === 'ngu_ngo' ? 'inset 0 0 8px rgba(255,105,180,0.05)' : 'inset 0 0 8px rgba(255,255,255,0.05)'
+              }}>
+                <History size={20} color="var(--text-main)" />
+              </div>
+              Lịch sử trò chuyện
             </h2>
-            <button className="icon-button" onClick={() => setShowHistory(false)} style={{ background: 'rgba(0,0,0,0.05)', borderRadius: '50%' }}>
-              <X size={24} />
+            <button className="icon-button" onClick={() => setShowHistory(false)} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '50%', padding: '7px', transition: '0.2s', border: '1px solid var(--glass-border)' }}>
+              <X size={16} color="var(--text-main)" opacity={0.8} />
             </button>
           </div>
 
@@ -1588,106 +1802,403 @@ function App() {
             flex: 1, overflowY: 'auto', padding: '20px',
             background: 'var(--bg-color)', display: 'flex', flexDirection: 'column', gap: '12px'
           }}>
+            <svg width="0" height="0" style={{ position: 'absolute' }}>
+              <defs>
+                <filter id="cloud3D" x="-50%" y="-50%" width="200%" height="200%">
+                  {/* Bóng đổ ngoài (đậm và gom lại hơn) */}
+                  <feDropShadow dx="0" dy="10" stdDeviation="4" floodColor="#000" floodOpacity="0.6" result="dropShadow" />
+
+                  {/* Bóng râm bên trong ở dưới (Sắc nét) */}
+                  <feOffset dx="0" dy="6" in="SourceAlpha" />
+                  <feGaussianBlur stdDeviation="1.5" result="offsetBlurDark" />
+                  <feComposite operator="out" in="SourceAlpha" in2="offsetBlurDark" result="inverseDark" />
+                  <feFlood floodColor="#000" floodOpacity="0.75" result="colorDark" />
+                  <feComposite operator="in" in="colorDark" in2="inverseDark" result="innerShadowDark" />
+
+                  {/* Viền sáng nổi bên trong ở trên (Sắc nét, sáng rực) */}
+                  <feOffset dx="0" dy="-3" in="SourceAlpha" />
+                  <feGaussianBlur stdDeviation="1" result="offsetBlurLight" />
+                  <feComposite operator="out" in="SourceAlpha" in2="offsetBlurLight" result="inverseLight" />
+                  <feFlood floodColor="#fff" floodOpacity="0.9" result="colorLight" />
+                  <feComposite operator="in" in="colorLight" in2="inverseLight" result="innerShadowLight" />
+
+                  <feMerge>
+                    <feMergeNode in="dropShadow" />
+                    <feMergeNode in="SourceGraphic" />
+                    <feMergeNode in="innerShadowDark" />
+                    <feMergeNode in="innerShadowLight" />
+                  </feMerge>
+                </filter>
+
+                {/* 3 Màu chủ đạo mới theo tính cách */}
+                <linearGradient id="cloudGrad_binh_thuong" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FFFFFF" />
+                  <stop offset="100%" stopColor="#CCCCCC" />
+                </linearGradient>
+
+                <linearGradient id="cloudGrad_mo_hon" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#444444" />
+                  <stop offset="100%" stopColor="#111111" />
+                </linearGradient>
+
+                <linearGradient id="cloudGrad_ngu_ngo" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FFD1DC" />
+                  <stop offset="100%" stopColor="#FF99CC" />
+                </linearGradient>
+              </defs>
+            </svg>
             {chatHistory.length === 0 ? (
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.5 }}>
                 <History size={64} style={{ marginBottom: 16 }} />
                 <p style={{ fontSize: '1.1rem' }}>Chưa có lịch sử nào.</p>
               </div>
             ) : (
-              chatHistory.map(chat => (
+              chatHistory.map((chat, index) => (
                 <div
                   key={chat.id}
                   onClick={() => loadChat(chat)}
+                  className={`cloud-card ${currentChatId === chat.id ? 'active' : ''}`}
+                >
+                  {/* SVG đám mây làm nền */}
+                  <svg className="cloud-card-bg" style={{ transform: CLOUD_TRANSFORMS[index % 4], transformOrigin: 'center' }} viewBox="0 0 200 72" preserveAspectRatio="none" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+                    <path d={ORIGINAL_CLOUD_PATH} style={{
+                      fill: `url(#cloudGrad_${aiPersona})`,
+                      filter: "url(#cloud3D)",
+                      stroke: currentChatId === chat.id ? "var(--text-main)" : "none",
+                      strokeWidth: currentChatId === chat.id ? 2 : 0
+                    }} />
+                  </svg>
+                  {/* Nội dung bên trong đám mây */}
+                  <div className="cloud-card-content" style={{ color: aiPersona === 'mo_hon' ? '#FFFFFF' : '#111111' }}>
+                    <div style={{ overflow: 'hidden', paddingRight: '16px', flex: 1 }}>
+                      {editingChatId === chat.id ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }} onClick={e => e.stopPropagation()}>
+                          <input
+                            type="text"
+                            autoFocus
+                            value={editingChatTitle}
+                            onChange={(e) => setEditingChatTitle(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') updateChatTitle(e, chat.id);
+                              if (e.key === 'Escape') setEditingChatId(null);
+                            }}
+                            style={{
+                              flex: 1, padding: '4px 8px', borderRadius: '4px',
+                              border: '1px solid var(--primary-color)', background: 'var(--bg-color)',
+                              color: 'var(--text-main)', outline: 'none', fontSize: '1rem', minWidth: 0
+                            }}
+                          />
+                          <button
+                            className="icon-button"
+                            onClick={(e) => updateChatTitle(e, chat.id)}
+                            style={{ padding: '6px', background: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', borderRadius: '50%', flexShrink: 0 }}
+                            title="Lưu tên mới"
+                          >
+                            <Check size={17} />
+                          </button>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                          <span style={{
+                            color: currentChatId === chat.id ? '#ffffff' : 'var(--text-main)',
+                            fontSize: '0.95rem', fontWeight: 600,
+                            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                          }}>
+                            {chat.title}
+                          </span>
+                          <button
+                            className="icon-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingChatTitle(chat.title);
+                              setEditingChatId(chat.id);
+                            }}
+                            style={{ padding: '4px', background: 'transparent', color: currentChatId === chat.id ? 'rgba(255,255,255,0.7)' : 'var(--text-main)', opacity: 0.7, borderRadius: '50%', flexShrink: 0 }}
+                            title="Đổi tên đoạn chat"
+                          >
+                            <Pencil size={13} />
+                          </button>
+                        </div>
+                      )}
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-main)', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: currentChatId === chat.id ? '#ffffff' : '#888' }} />
+                        {new Date(chat.timestamp).toLocaleString('vi-VN')}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        className="icon-button"
+                        onClick={(e) => deleteChat(e, chat.id)}
+                        style={{
+                          padding: '8px', background: 'rgba(255, 68, 68, 0.1)', color: '#ff4444',
+                          borderRadius: '50%', flexShrink: 0
+                        }}
+                        title="Xóa đoạn chat này"
+                      >
+                        <Trash2 size={17} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* === MODAL HUẤN LUYỆN AI === */}
+      {showTraining && (
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'var(--bg-color)', zIndex: 9999,
+          display: 'flex', flexDirection: 'column',
+          animation: 'fadeIn 0.3s ease-out'
+        }}>
+          {/* Header */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '18px 22px',
+            background: 'linear-gradient(120deg, rgba(102,252,241,0.18) 0%, rgba(69,162,158,0.10) 60%, rgba(20,20,30,0.0) 100%)',
+            backdropFilter: 'blur(12px)',
+            borderBottom: '1px solid rgba(102,252,241,0.15)',
+            boxShadow: '0 4px 30px rgba(102,252,241,0.06)',
+            zIndex: 10
+          }}>
+            <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.15rem', margin: 0, color: 'var(--text-main)', fontWeight: 700 }}>
+              <div style={{ padding: '7px', background: 'rgba(102, 252, 241, 0.1)', borderRadius: '12px', display: 'flex', boxShadow: 'inset 0 0 8px rgba(102,252,241,0.05)' }}>
+                <Brain size={20} color="var(--primary-color)" />
+              </div>
+              Huấn luyện AI
+            </h2>
+            <button className="icon-button" onClick={() => setShowTraining(false)} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '50%', padding: '7px', transition: '0.2s', border: '1px solid var(--glass-border)' }}>
+              <X size={16} color="var(--text-main)" opacity={0.8} />
+            </button>
+          </div>
+
+          {/* Nội dung */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+            {/* Hướng dẫn */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(102, 252, 241, 0.08) 0%, rgba(69, 162, 158, 0.04) 100%)',
+              border: '1px solid rgba(102, 252, 241, 0.2)',
+              borderRadius: '16px', padding: '16px',
+              fontSize: '0.9rem', lineHeight: '1.6',
+              color: 'var(--text-main)', opacity: 0.85
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', fontWeight: 700, color: 'var(--primary-color)' }}>
+                <GraduationCap size={20} /> Cách huấn luyện
+              </div>
+              <p style={{ margin: '0 0 6px 0' }}>Dạy AI những thông tin cá nhân để AI hiểu bạn hơn.</p>
+              <p style={{ margin: '0 0 6px 0' }}><strong>Ví dụ:</strong></p>
+              <ul style={{ margin: '0', paddingLeft: '20px' }}>
+                <li>Chủ đề: <em>"Sinh nhật của tôi"</em> <br></br>Nội dung: <em>"dd/mm/yyyy"</em></li>
+
+              </ul>
+
+            </div>
+
+            {/* Form thêm mới */}
+            <div style={{
+              background: 'var(--surface-color)',
+              borderRadius: '16px', padding: '16px',
+              border: '1px solid var(--glass-border)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+            }}>
+              <div style={{ fontWeight: 700, marginBottom: '12px', color: 'var(--primary-color)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Plus size={18} /> Thêm kiến thức mới
+              </div>
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontSize: '0.85rem', color: 'var(--text-main)', opacity: 0.7, display: 'block', marginBottom: '4px' }}>Chủ đề / Câu hỏi:</label>
+                <input
+                  type="text"
+                  placeholder="Nhập câu hỏi của bạn"
+                  value={newTrainQ}
+                  onChange={(e) => setNewTrainQ(e.target.value)}
                   style={{
-                    padding: '16px',
-                    background: currentChatId === chat.id 
-                      ? 'linear-gradient(135deg, rgba(102, 252, 241, 0.15) 0%, rgba(69, 162, 158, 0.05) 100%)' 
-                      : 'var(--surface-color)',
-                    borderRadius: '16px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    border: currentChatId === chat.id ? '1px solid var(--primary-color)' : '1px solid var(--glass-border)',
+                    width: '100%', padding: '10px 14px', borderRadius: '10px',
+                    border: '1px solid var(--glass-border)', background: 'var(--bg-color)',
+                    color: 'var(--text-main)', outline: 'none', fontSize: '0.95rem',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '12px' }}>
+                <label style={{ fontSize: '0.85rem', color: 'var(--text-main)', opacity: 0.7, display: 'block', marginBottom: '4px' }}>Câu trả lời / Nội dung:</label>
+                <textarea
+                  placeholder="Nhập câu trả lời của bạn"
+                  value={newTrainA}
+                  onChange={(e) => setNewTrainA(e.target.value)}
+                  rows={3}
+                  style={{
+                    width: '100%', padding: '10px 14px', borderRadius: '10px',
+                    border: '1px solid var(--glass-border)', background: 'var(--bg-color)',
+                    color: 'var(--text-main)', outline: 'none', fontSize: '0.95rem',
+                    resize: 'vertical', fontFamily: 'inherit',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+              <button
+                onClick={addTrainingEntry}
+                disabled={!newTrainQ.trim() || !newTrainA.trim()}
+                style={{
+                  width: '100%', padding: '12px',
+                  background: (!newTrainQ.trim() || !newTrainA.trim()) ? 'rgba(102, 252, 241, 0.2)' : 'var(--primary-color)',
+                  color: (!newTrainQ.trim() || !newTrainA.trim()) ? 'rgba(255,255,255,0.4)' : '#000',
+                  border: 'none', borderRadius: '12px',
+                  fontWeight: 700, fontSize: '1rem',
+                  cursor: (!newTrainQ.trim() || !newTrainA.trim()) ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+                }}
+              >
+                {trainingSaving ? (
+                  <><div style={{ width: 16, height: 16, border: '2px solid #000', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} /> Đang lưu...</>
+                ) : (
+                  <><Plus size={18} /> Thêm kiến thức</>
+                )}
+              </button>
+            </div>
+
+            {/* Danh sách dữ liệu đã huấn luyện */}
+            <div style={{ fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+              <BookOpen size={18} color="var(--primary-color)" />
+              Kiến thức đã dạy ({trainingData.length})
+            </div>
+
+            {trainingData.length === 0 ? (
+              <div style={{
+                flex: 1, display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                opacity: 0.4, padding: '40px 0'
+              }}>
+                <Brain size={64} style={{ marginBottom: 16 }} />
+                <p style={{ fontSize: '1.05rem', textAlign: 'center' }}>Chưa có kiến thức nào.<br />Hãy bắt đầu dạy AI về bạn!</p>
+              </div>
+            ) : (
+              trainingData.map(entry => (
+                <div
+                  key={entry.id}
+                  style={{
+                    background: 'var(--surface-color)',
+                    borderRadius: '16px', padding: '16px',
+                    border: editingTrainId === entry.id ? '1px solid var(--primary-color)' : '1px solid var(--glass-border)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseEnter={(e) => {
-                    if (currentChatId !== chat.id) e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (currentChatId !== chat.id) e.currentTarget.style.transform = 'translateY(0)';
-                  }}
                 >
-                  <div style={{ overflow: 'hidden', paddingRight: '16px', flex: 1 }}>
-                    {editingChatId === chat.id ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }} onClick={e => e.stopPropagation()}>
+                  {editingTrainId === entry.id ? (
+                    /* Chế độ chỉnh sửa */
+                    <div>
+                      <div style={{ marginBottom: '8px' }}>
+                        <label style={{ fontSize: '0.8rem', color: 'var(--primary-color)', fontWeight: 600 }}>Chủ đề:</label>
                         <input
                           type="text"
+                          value={editTrainQ}
+                          onChange={(e) => setEditTrainQ(e.target.value)}
                           autoFocus
-                          value={editingChatTitle}
-                          onChange={(e) => setEditingChatTitle(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') updateChatTitle(e, chat.id);
-                            if (e.key === 'Escape') setEditingChatId(null);
-                          }}
                           style={{
-                            flex: 1, padding: '4px 8px', borderRadius: '4px',
+                            width: '100%', padding: '8px 12px', borderRadius: '8px',
                             border: '1px solid var(--primary-color)', background: 'var(--bg-color)',
-                            color: 'var(--text-main)', outline: 'none', fontSize: '1rem'
+                            color: 'var(--text-main)', outline: 'none', fontSize: '0.95rem',
+                            marginTop: '4px', boxSizing: 'border-box'
                           }}
                         />
                       </div>
-                    ) : (
-                      <div style={{ 
-                        color: currentChatId === chat.id ? 'var(--primary-color)' : 'var(--text-main)', 
-                        fontSize: '1.05rem', fontWeight: 600, 
-                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '6px' 
-                      }}>
-                        {chat.title}
+                      <div style={{ marginBottom: '12px' }}>
+                        <label style={{ fontSize: '0.8rem', color: 'var(--primary-color)', fontWeight: 600 }}>Nội dung:</label>
+                        <textarea
+                          value={editTrainA}
+                          onChange={(e) => setEditTrainA(e.target.value)}
+                          rows={3}
+                          style={{
+                            width: '100%', padding: '8px 12px', borderRadius: '8px',
+                            border: '1px solid var(--primary-color)', background: 'var(--bg-color)',
+                            color: 'var(--text-main)', outline: 'none', fontSize: '0.95rem',
+                            resize: 'vertical', fontFamily: 'inherit',
+                            marginTop: '4px', boxSizing: 'border-box'
+                          }}
+                        />
                       </div>
-                    )}
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-main)', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: currentChatId === chat.id ? 'var(--primary-color)' : '#888' }} />
-                      {new Date(chat.timestamp).toLocaleString('vi-VN')}
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          onClick={() => saveEditTraining(entry.id)}
+                          style={{
+                            flex: 1, padding: '10px', background: 'var(--primary-color)',
+                            color: '#000', border: 'none', borderRadius: '10px',
+                            fontWeight: 700, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                          }}
+                        >
+                          <Check size={16} /> Lưu
+                        </button>
+                        <button
+                          onClick={() => setEditingTrainId(null)}
+                          style={{
+                            flex: 1, padding: '10px', background: 'rgba(255,255,255,0.05)',
+                            color: 'var(--text-main)', border: '1px solid var(--glass-border)',
+                            borderRadius: '10px', fontWeight: 600, cursor: 'pointer'
+                          }}
+                        >
+                          Huỷ
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {editingChatId === chat.id ? (
-                      <button
-                        className="icon-button"
-                        onClick={(e) => updateChatTitle(e, chat.id)}
-                        style={{ padding: '8px', background: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', borderRadius: '50%', flexShrink: 0 }}
-                        title="Lưu tên mới"
-                      >
-                        <Check size={20} />
-                      </button>
-                    ) : (
-                      <button
-                        className="icon-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEditingChatTitle(chat.title);
-                          setEditingChatId(chat.id);
-                        }}
-                        style={{ padding: '8px', background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-main)', borderRadius: '50%', flexShrink: 0 }}
-                        title="Đổi tên đoạn chat"
-                      >
-                        <Pencil size={20} />
-                      </button>
-                    )}
-                    <button
-                      className="icon-button"
-                      onClick={(e) => deleteChat(e, chat.id)}
-                      style={{ 
-                        padding: '8px', background: 'rgba(255, 68, 68, 0.1)', color: '#ff4444', 
-                        borderRadius: '50%', flexShrink: 0 
-                      }}
-                      title="Xóa đoạn chat này"
-                    >
-                      <Trash2 size={20} />
-                    </button>
-                  </div>
+                  ) : (
+                    /* Chế độ xem */
+                    <div>
+                      <div style={{
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px'
+                      }}>
+                        <div style={{ flex: 1, overflow: 'hidden' }}>
+                          <div style={{
+                            color: 'var(--primary-color)', fontWeight: 700,
+                            fontSize: '0.95rem', marginBottom: '6px',
+                            display: 'flex', alignItems: 'center', gap: '6px'
+                          }}>
+                            💡 {entry.question}
+                          </div>
+                          <div style={{
+                            color: 'var(--text-main)', opacity: 0.85,
+                            fontSize: '0.9rem', lineHeight: '1.5',
+                            whiteSpace: 'pre-wrap'
+                          }}>
+                            {entry.answer}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                          <button
+                            onClick={() => startEditTraining(entry)}
+                            style={{
+                              padding: '8px', background: 'rgba(255,255,255,0.05)',
+                              color: 'var(--text-main)', border: 'none',
+                              borderRadius: '50%', cursor: 'pointer'
+                            }}
+                            title="Chỉnh sửa"
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
+                            onClick={() => deleteTrainingEntry(entry.id)}
+                            style={{
+                              padding: '8px', background: 'rgba(255, 68, 68, 0.1)',
+                              color: '#ff4444', border: 'none',
+                              borderRadius: '50%', cursor: 'pointer'
+                            }}
+                            title="Xoá"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                      {entry.createdAt && (
+                        <div style={{ fontSize: '0.75rem', opacity: 0.4, marginTop: '8px' }}>
+                          {new Date(entry.createdAt).toLocaleString('vi-VN')}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))
             )}
@@ -1731,24 +2242,24 @@ function App() {
           <button className="icon-button" style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(255,255,255,0.1)' }} onClick={() => setShowVoiceOverlay(false)}>
             <X size={28} color="#fff" />
           </button>
-          
+
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '40px', width: '100%' }}>
             <h2 style={{ color: '#fff', fontSize: '1.5rem', textAlign: 'center', fontWeight: 500 }}>
               {isListening ? "Đang nghe..." : "Nhấn giữ nút dưới đây để nói"}
             </h2>
-            
-            <div style={{ 
-              color: 'rgba(255,255,255,0.7)', 
-              fontSize: '1.2rem', 
-              minHeight: '60px', 
-              maxWidth: '80%', 
+
+            <div style={{
+              color: 'rgba(255,255,255,0.7)',
+              fontSize: '1.2rem',
+              minHeight: '60px',
+              maxWidth: '80%',
               textAlign: 'center',
               fontStyle: 'italic',
               wordWrap: 'break-word'
             }}>
               {voiceOverlayText || "..."}
             </div>
-            
+
             <button
               onMouseDown={startListening}
               onMouseUp={stopListening}
@@ -1775,7 +2286,7 @@ function App() {
             >
               <Mic size={56} color="#fff" />
             </button>
-            
+
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1rem' }}>
               Thả tay ra để gửi
             </p>
@@ -1785,20 +2296,20 @@ function App() {
 
       {/* Context Menu cho tin nhắn */}
       {selectedMessageIndex !== null && (
-        <div 
-          className="modal-overlay" 
+        <div
+          className="modal-overlay"
           style={{ background: 'transparent', zIndex: 10000 }}
           onClick={() => setSelectedMessageIndex(null)}
           onContextMenu={(e) => { e.preventDefault(); setSelectedMessageIndex(null); }}
         >
-          <div 
-            style={{ 
-              position: 'absolute', 
-              top: Math.min(contextMenuPos.y, window.innerHeight - 150), 
-              left: Math.min(contextMenuPos.x, window.innerWidth - 180), 
-              background: 'var(--surface-color)', 
-              borderRadius: '12px', 
-              boxShadow: '0 4px 20px rgba(0,0,0,0.5)', 
+          <div
+            style={{
+              position: 'absolute',
+              top: Math.min(contextMenuPos.y, window.innerHeight - 150),
+              left: Math.min(contextMenuPos.x, window.innerWidth - 180),
+              background: 'var(--surface-color)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
               border: '1px solid rgba(255,255,255,0.1)',
               overflow: 'hidden',
               display: 'flex',
@@ -1807,22 +2318,22 @@ function App() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
-              onClick={handleReplyMessage} 
+            <button
+              onClick={handleReplyMessage}
               style={{ background: 'none', border: 'none', padding: '12px 16px', color: '#fff', textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
             >
               <Reply size={16} />
               Trả lời
             </button>
-            <button 
-              onClick={handleCopyMessage} 
+            <button
+              onClick={handleCopyMessage}
               style={{ background: 'none', border: 'none', padding: '12px 16px', color: '#fff', textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
             >
               <Copy size={16} />
               Sao chép
             </button>
-            <button 
-              onClick={handleDeleteMessage} 
+            <button
+              onClick={handleDeleteMessage}
               style={{ background: 'none', border: 'none', padding: '12px 16px', color: '#ff4444', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
             >
               <Trash2 size={16} />

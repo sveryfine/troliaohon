@@ -508,25 +508,31 @@ body {
 .form-group select {
   background: var(--surface-color);
   border: 1px solid var(--glass-border);
-  border-radius: 8px;
-  padding: 10px 12px;
+  border-radius: 14px;
+  padding: 12px 14px;
   color: var(--text-main);
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s ease;
   width: 100%;
 }
 
-.form-group input:focus {
+.form-group select {
+  cursor: pointer;
+}
+
+.form-group input:focus,
+.form-group select:focus {
   border-color: var(--primary-color);
+  box-shadow: 0 0 12px rgba(102, 252, 241, 0.15);
 }
 
 .save-button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
   color: #111;
   font-weight: 600;
   font-family: inherit;
@@ -537,4 +543,53 @@ body {
 
 .save-button:hover {
   opacity: 0.9;
+}
+
+/* Hình đám mây cho Lịch sử trò chuyện */
+.cloud-card {
+  position: relative;
+  padding: 22px 30px;
+  margin: 14px 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cloud-card:hover {
+  transform: translateY(-2px);
+}
+
+.cloud-card-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
+}
+
+.cloud-card-bg path {
+  fill: var(--surface-color);
+  stroke: var(--glass-border);
+  stroke-width: 1.2;
+  transition: all 0.3s ease;
+}
+
+.cloud-card.active .cloud-card-bg path {
+  fill: var(--surface-color);
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+.cloud-card.active .cloud-card-bg {
+  filter: drop-shadow(0 6px 16px rgba(255, 255, 255, 0.2));
+}
+
+.cloud-card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
 }
